@@ -27,6 +27,10 @@ No installation required - runs entirely in your browser.
 
 All data is stored locally in your browser using localStorage. Nothing is sent to any server. Your character data never leaves your device.
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 ## Credits
 
 Made with ❤️ in Sri Lanka by [Theena Kumaragurunathan](https://theena.net/) using [OpenCode](https://opencode.ai).
