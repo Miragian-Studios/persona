@@ -42,7 +42,6 @@
 (require 'json)
 (require 'seq)
 (require 'org)
-(require 'ox-hatex)
 (require 'ox-latex)
 
 ;;;; Customization
