@@ -1,0 +1,4236 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Persona - Fictional Character Generator</title>
+  <style>
+    :root {
+      --font-heading: Georgia, 'Times New Roman', serif;
+      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: Consolas, Monaco, 'Courier New', monospace;
+      --transition: 0.2s ease;
+      --radius: 8px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    [data-theme="dark"] {
+      --base: #1e1e2e;
+      --surface: #313244;
+      --surface-hover: #45475a;
+      --overlay: #45475a;
+      --text: #cdd6f4;
+      --text-muted: #bac2de;
+      --accent: #f5c2e7;
+      --accent-blue: #89b4fa;
+      --green: #a6e3a1;
+      --red: #f38ba8;
+      --yellow: #f9e2af;
+      --orange: #fab387;
+      --peach: #f9e2af;
+      --maroon: #eba0ac;
+      --flamingo: #f2cdcd;
+      --pink: #f5c2e7;
+      --mauve: #cba6f7;
+      --lavender: #b4befe;
+      --sky: #89dceb;
+      --teal: #94e2d5;
+      --sapphire: #74c7ec;
+      --graph-1: #f38ba8;
+      --graph-2: #a6e3a1;
+      --graph-3: #89dceb;
+      --graph-4: #fab387;
+      --graph-5: #cba6f7;
+      --graph-6: #f9e2af;
+      --graph-7: #94e2d5;
+      --graph-8: #74c7ec;
+      --graph-line: #cdd6f4;
+      --graph-axis: #6c7086;
+      --border: #45475a;
+      --scrollbar: #45475a;
+      --scrollbar-hover: #585b70;
+    }
+
+    [data-theme="light"] {
+      --base: #eff1f5;
+      --surface: #e6e9ef;
+      --surface-hover: #dce0e8;
+      --overlay: #ccd0da;
+      --text: #4c4f69;
+      --text-muted: #6c6f85;
+      --accent: #ea76cb;
+      --accent-blue: #1e66f5;
+      --green: #40a02b;
+      --red: #d20f39;
+      --yellow: #df8e1d;
+      --orange: #fe640b;
+      --peach: #df8e1d;
+      --maroon: #e64553;
+      --flamingo: #dc8a78;
+      --pink: #ea76cb;
+      --mauve: #8839ef;
+      --graph-1: #d20f39;
+      --graph-2: #40a02b;
+      --graph-3: #04a5e5;
+      --graph-4: #fe640b;
+      --graph-5: #8839ef;
+      --graph-6: #df8e1d;
+      --graph-7: #179299;
+      --graph-8: #209fb5;
+      --graph-line: #4c4f69;
+      --graph-axis: #6c6f85;
+      --border: #ccd0da;
+      --lavender: #7287fd;
+      --sky: #04a5e5;
+      --teal: #179299;
+      --sapphire: #209fb5;
+      --graph-1: #ea76cb;
+      --graph-2: #1e66f5;
+      --graph-3: #40a02b;
+      --graph-4: #df8e1d;
+      --graph-5: #fe640b;
+      --border: #ccd0da;
+      --scrollbar: #ccd0da;
+      --scrollbar-hover: #bcc0cc;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--base);
+      color: var(--text);
+      transition: background var(--transition), color var(--transition);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--surface);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--scrollbar);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--scrollbar-hover);
+    }
+
+    .app-container {
+      display: flex;
+      height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    .app-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      padding: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      background: var(--base);
+      z-index: 100;
+    }
+
+    .app-footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .app-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .app-footer-warning {
+      color: var(--warning);
+      font-size: 0.75rem;
+      margin-bottom: 8px;
+    }
+
+    .app-footer .license {
+      font-size: 0.7rem;
+      opacity: 0.7;
+    }
+
+    .footer-link {
+      color: var(--accent);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .footer-link:hover {
+      opacity: 0.8;
+    }
+
+    .sidebar {
+      width: 320px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .filter-bar {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .character-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+    }
+
+    .logo {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--base);
+      color: var(--text);
+      font-size: 0.9rem;
+      transition: all var(--transition);
+    }
+
+    .search-box:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 8px;
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--base);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--accent);
+      color: var(--base);
+      border-color: var(--accent);
+    }
+
+    .character-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+    }
+
+    .character-item {
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      margin-bottom: 4px;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .character-item:hover {
+      background: var(--surface-hover);
+    }
+
+    .character-item.active {
+      background: var(--overlay);
+      border-left: 3px solid var(--accent);
+    }
+
+    .character-item-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .order-btn {
+      width: 20px;
+      height: 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 10px;
+      line-height: 1;
+      padding: 0;
+      opacity: 0.5;
+      transition: opacity var(--transition);
+    }
+
+    .order-btn:hover:not(:disabled) {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    .order-btn:disabled {
+      opacity: 0.2;
+      cursor: default;
+    }
+
+    .character-item-content {
+      flex: 1;
+    }
+
+    .character-item-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .character-item-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .add-btn {
+      margin: 16px 20px;
+      padding: 12px;
+      background: var(--accent);
+      color: var(--base);
+      border: none;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+
+    .add-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .main-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .main-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--surface);
+    }
+
+    .main-title {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+    }
+
+    .project-title {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .header-actions .btn-primary {
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+
+    .project-selector {
+      position: relative;
+      display: inline-block;
+    }
+
+    .project-selector-label {
+      padding: 8px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+
+    .project-selector-label:hover {
+      border-color: var(--accent);
+    }
+
+    .project-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      min-width: 220px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      margin-top: 4px;
+    }
+
+    .project-selector.open .project-dropdown {
+      display: block;
+    }
+
+    .project-dropdown-header {
+      padding: 10px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .project-list {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .project-item {
+      padding: 10px 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .project-item:last-child {
+      border-bottom: none;
+    }
+
+    .project-item:hover {
+      background: var(--surface-hover);
+    }
+
+    .project-item.active {
+      background: var(--overlay);
+      border-left: 3px solid var(--accent);
+    }
+
+    .project-item-name {
+      font-weight: 500;
+    }
+
+    .project-item-count {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .project-dropdown-footer {
+      padding: 10px 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+
+    .more-menu-btn {
+      display: none;
+    }
+
+    .more-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      min-width: 180px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      margin-top: 4px;
+      padding: 4px 0;
+    }
+
+    .more-menu.open {
+      display: block;
+    }
+
+    .more-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--text);
+      transition: background var(--transition);
+    }
+
+    .more-menu-item:hover {
+      background: var(--surface-hover);
+    }
+
+    .more-menu-item.danger {
+      color: var(--red);
+    }
+
+    .more-menu-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 0;
+    }
+
+    .header-actions-right {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .desktop-only {
+      display: flex;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--base);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: all var(--transition);
+    }
+
+    .icon-btn:hover {
+      background: var(--surface-hover);
+    }
+
+    .icon-btn.danger:hover {
+      background: var(--red);
+      color: white;
+      border-color: var(--red);
+    }
+
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-state-text {
+      font-size: 1.1rem;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+
+    .tab {
+      padding: 12px 20px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      cursor: pointer;
+      position: relative;
+      transition: color var(--transition);
+    }
+
+    .tab:hover {
+      color: var(--text);
+    }
+
+    .tab.active {
+      color: var(--accent);
+    }
+
+    .tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .section {
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .field-row .field {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .field-input[readonly] {
+      background: var(--base);
+      color: var(--text-muted);
+      cursor: default;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .field-input, .field-textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: var(--font-body);
+      transition: all var(--transition);
+    }
+
+    .field-input:focus, .field-textarea:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+    }
+
+    .field-textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .relationships-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .relationship-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--overlay);
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .relationship-tag button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0;
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .relationship-tag button:hover {
+      color: var(--red);
+    }
+
+    .notes-section {
+      margin-top: 24px;
+    }
+
+    .note-item {
+      padding: 12px 16px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      border-left: 3px solid var(--accent-blue);
+    }
+
+    .note-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .note-date {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .note-content {
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .add-note-form {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .add-note-form input {
+      flex: 1;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 30px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .timeline-event {
+      position: relative;
+      padding: 16px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+    }
+
+    .timeline-event::before {
+      content: '';
+      position: absolute;
+      left: -26px;
+      top: 20px;
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
+      border-radius: 50%;
+      border: 2px solid var(--base);
+    }
+
+    .timeline-date {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .timeline-title {
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .timeline-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 24px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.9);
+      transition: transform var(--transition);
+    }
+
+    .modal-overlay.active .modal {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      color: var(--text);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--base);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface-hover);
+    }
+
+    .btn-danger {
+      background: var(--red);
+      color: white;
+      border: none;
+    }
+
+    .btn-danger:hover {
+      opacity: 0.9;
+    }
+
+    .graph-view {
+      width: 100%;
+      height: 500px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .graph-view svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .graph-node {
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .graph-node:hover circle {
+      filter: brightness(1.15);
+      stroke-width: 4;
+    }
+
+    .graph-node circle {
+      fill: var(--accent);
+      stroke: var(--surface);
+      stroke-width: 3;
+      transition: all 0.15s ease;
+    }
+
+    .graph-node text {
+      fill: var(--base);
+      font-size: 13px;
+      font-weight: bold;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      pointer-events: none;
+    }
+
+    .graph-link {
+      stroke: var(--graph-axis);
+      stroke-width: 2;
+      stroke-opacity: 0.6;
+      fill: none;
+    }
+
+    .compare-arcs-header {
+      margin-bottom: 16px;
+    }
+
+    .compare-instructions {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .compare-select-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 8px;
+    }
+
+    .compare-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all var(--transition);
+    }
+
+    .compare-checkbox:hover {
+      background: var(--surface-hover);
+    }
+
+    .compare-checkbox.selected {
+      border-color: var(--accent);
+      background: var(--overlay);
+    }
+
+    .compare-checkbox input {
+      display: none;
+    }
+
+    .view-section {
+      display: block;
+    }
+
+    .graph-container {
+      width: 100%;
+      height: 500px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--base);
+      overflow: hidden;
+    }
+
+    #relationshipGraph {
+      width: 100%;
+      height: 100%;
+      background: var(--surface);
+    }
+
+    .arc-chart-container {
+      width: 100%;
+      min-height: 300px;
+      margin: 20px 0;
+    }
+
+    .compare-select {
+      margin-bottom: 20px;
+    }
+
+    .compare-select label {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .psych-index-display {
+      margin-top: 16px;
+      padding: 12px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+    }
+
+    .psych-label {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .psych-index-display span:not(.psych-label):not(.psych-act) {
+      font-weight: bold;
+      color: var(--accent);
+      margin-left: 8px;
+    }
+
+    .psych-act {
+      margin-left: 12px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .note-input-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .note-input-row .field-input {
+      flex: 1;
+    }
+
+    .export-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .export-buttons .btn {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .compare-checkbox.selected::before {
+      content: '✓';
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .graph-link {
+      stroke: var(--border);
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .auth-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: var(--base);
+    }
+
+    .auth-card {
+      background: var(--surface);
+      padding: 40px;
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 400px;
+      box-shadow: var(--shadow);
+    }
+
+    .auth-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .auth-footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .auth-footer a:hover {
+      text-decoration: underline;
+    }
+
+    .auth-footer .license {
+      font-size: 0.7rem;
+      opacity: 0.7;
+    }
+
+    .auth-title {
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      text-align: center;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .auth-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .auth-description {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .auth-warning {
+      text-align: center;
+      color: var(--warning);
+      font-size: 0.8rem;
+      margin-bottom: 20px;
+      padding: 12px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      line-height: 1.4;
+    }
+
+    .auth-tabs {
+      display: flex;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 12px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .auth-tab.active {
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .auth-form {
+      display: none;
+    }
+
+    .auth-form.active {
+      display: block;
+    }
+
+    .chart-container {
+      width: 100%;
+      height: 300px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .chart-canvas {
+      width: 100%;
+      height: 300px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+    }
+
+    .card-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .export-options {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .export-btn {
+      padding: 12px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all var(--transition);
+    }
+
+    .export-btn:hover {
+      background: var(--surface-hover);
+      border-color: var(--accent);
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-input-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      color: var(--text-muted);
+      transition: all var(--transition);
+    }
+
+    .file-input-wrapper:hover .file-input-label {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .about-section {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .about-title {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+
+    .about-content p {
+      margin-bottom: 16px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .modal-large {
+      max-width: 700px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .help-content {
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .faq-section {
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-section:last-child {
+      border-bottom: none;
+    }
+
+    .faq-section h4 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .faq-section p {
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+
+    .faq-detail {
+      margin-top: 12px !important;
+      padding-left: 16px;
+      border-left: 3px solid var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .project-manage-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .project-manage-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .project-manage-item:last-child {
+      border-bottom: none;
+    }
+
+    .project-manage-info {
+      flex: 1;
+    }
+
+    .project-manage-name {
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .project-manage-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .project-manage-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .project-manage-actions .btn {
+      padding: 4px 8px;
+      font-size: 0.75rem;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 12px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 2000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      border-left: 3px solid var(--green);
+    }
+
+    .toast.error {
+      border-left: 3px solid var(--red);
+    }
+
+    @media print {
+      .sidebar, .main-header, .tabs, .modal-overlay {
+        display: none !important;
+      }
+      .main-panel {
+        position: static;
+      }
+      .main-content {
+        padding: 0;
+      }
+      body {
+        background: white;
+        color: black;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 280px;
+      }
+      .character-item {
+        padding: 10px 12px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      html, body {
+        height: auto;
+        overflow: auto;
+        overflow-x: hidden;
+      }
+      .app-container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+      }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 40vh;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .sidebar-header {
+        padding: 16px;
+      }
+      .logo {
+        font-size: 1.3rem;
+        margin-bottom: 12px;
+      }
+      .filter-bar {
+        padding: 8px 16px;
+        overflow-x: auto;
+      }
+      .character-list {
+        max-height: 25vh;
+      }
+      .add-btn {
+        margin: 12px 16px;
+      }
+      .main-panel {
+        height: auto;
+        min-height: 60vh;
+      }
+      .main-header {
+        padding: 12px 16px;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .main-title {
+        font-size: 1.2rem;
+      }
+      .header-actions {
+        gap: 4px;
+      }
+      .desktop-only {
+        display: none !important;
+      }
+      .more-menu-btn {
+        display: inline-block;
+        position: relative;
+      }
+      .project-selector-label {
+        max-width: 120px;
+      }
+      .project-dropdown {
+        right: 0;
+        left: auto;
+        min-width: 180px;
+        max-width: calc(100vw - 20px);
+        overflow-x: hidden;
+      }
+      .project-list {
+        overflow-x: hidden;
+      }
+      .icon-btn {
+        width: 36px;
+        height: 36px;
+      }
+      .main-content {
+        padding: 16px;
+      }
+      .tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .tab {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+      }
+      .section {
+        margin-bottom: 24px;
+      }
+      .section-title {
+        font-size: 0.9rem;
+      }
+      .field-input, .field-textarea {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+      }
+      .graph-view {
+        height: 350px;
+      }
+      .chart-container {
+        height: 250px;
+      }
+      .modal {
+        padding: 16px;
+        width: 95%;
+        max-width: none;
+        max-height: 85vh;
+        margin: 10px;
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+      .project-manage-list {
+        overflow-x: hidden;
+      }
+      .project-manage-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        word-wrap: break-word;
+      }
+      .project-manage-info {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+      .project-manage-name {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+      .project-manage-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+      .project-manage-actions .btn {
+        font-size: 0.7rem;
+        padding: 6px 8px;
+      }
+      .modal-title {
+        font-size: 1.1rem;
+      }
+      .modal-actions {
+        flex-wrap: wrap;
+      }
+      .btn {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+      }
+      .auth-card {
+        padding: 24px;
+        margin: 16px;
+      }
+      .auth-title {
+        font-size: 1.5rem;
+      }
+      .export-options {
+        flex-direction: column;
+      }
+      .export-btn {
+        width: 100%;
+        text-align: center;
+      }
+      .relationships-list {
+        flex-direction: column;
+      }
+      .relationship-tag {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .timeline {
+        padding-left: 24px;
+      }
+      .timeline-event {
+        padding: 12px;
+      }
+      .compare-arcs-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .compare-arc-legend {
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 480px) {
+      html, body {
+        overflow-x: hidden;
+      }
+      .modal {
+        overflow-x: hidden;
+        word-wrap: break-word;
+      }
+      .project-manage-actions .btn {
+        font-size: 0.6rem;
+        padding: 4px 5px;
+      }
+      .sidebar-header {
+        padding: 12px;
+      }
+      .search-box {
+        padding: 8px 12px;
+      }
+      .main-content {
+        padding: 12px;
+      }
+      .field {
+        margin-bottom: 16px;
+      }
+      .field-row {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .field-row .field {
+        margin-bottom: 0;
+      }
+      .graph-view {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <h1 class="auth-title">Persona</h1>
+      <p class="auth-subtitle">Fictional Character Generator</p>
+      <p class="auth-description">A private, offline-first tool for writers and actors to build fictional characters with psychological depth.</p>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Login</button>
+        <button class="auth-tab" data-tab="register">Register</button>
+      </div>
+      <form id="loginForm" class="auth-form active">
+        <div class="field">
+          <label class="field-label">Username</label>
+          <input type="text" class="field-input" id="loginUsername" required>
+        </div>
+        <div class="field">
+          <label class="field-label">Password</label>
+          <input type="password" class="field-input" id="loginPassword" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%">Login</button>
+      </form>
+      <form id="registerForm" class="auth-form">
+        <div class="field">
+          <label class="field-label">Username</label>
+          <input type="text" class="field-input" id="regUsername" required>
+        </div>
+        <div class="field">
+          <label class="field-label">Email</label>
+          <input type="email" class="field-input" id="regEmail" required>
+        </div>
+        <div class="field">
+          <label class="field-label">Password</label>
+          <input type="password" class="field-input" id="regPassword" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%">Create Account</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="appScreen" class="app-container" style="display: none;">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h1 class="logo">Persona</h1>
+        <input type="text" class="search-box" id="searchInput" placeholder="Search characters...">
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="recent">Recent</button>
+      </div>
+      <div class="character-list" id="characterList"></div>
+      <button class="add-btn" id="addCharacterBtn">+ Add Character</button>
+    </aside>
+
+    <main class="main-panel">
+      <header class="main-header">
+        <div>
+          <span id="projectTitle" class="project-title"></span>
+          <h2 class="main-title" id="mainTitle">Select a Character</h2>
+        </div>
+        <div class="header-actions">
+          <div class="project-selector" id="projectSelector">
+            <span class="project-selector-label">Select Project</span>
+            <div class="project-dropdown" id="projectDropdown">
+              <div class="project-dropdown-header">Projects</div>
+              <div class="project-list" id="projectList"></div>
+              <div class="project-dropdown-footer">
+                <button class="btn btn-secondary btn-small" id="newProjectBtn">+ New Project</button>
+                <button class="btn btn-secondary btn-small" id="manageProjectsBtn">Manage</button>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" id="addCharacterBtnHeader" title="Add Character">+ Add Character</button>
+          <button class="icon-btn" id="settingsBtn" title="Project Settings">⚙</button>
+          <button class="icon-btn" id="themeToggle" title="Toggle Theme">☀</button>
+          <button class="icon-btn" id="helpBtn" title="Help & FAQ">?</button>
+          <div class="more-menu-btn" id="moreMenuBtn">
+            <button class="icon-btn">⋮</button>
+            <div class="more-menu" id="moreMenu">
+              <div class="more-menu-item" data-action="bible"><span>📖</span> Generate Bible</div>
+              <div class="more-menu-item" data-action="graph"><span>◉</span> Relationship Graph</div>
+              <div class="more-menu-item" data-action="compare"><span>⊞</span> Compare Arcs</div>
+              <div class="more-menu-divider"></div>
+              <div class="more-menu-item" data-action="export"><span>↓</span> Export Data</div>
+              <div class="more-menu-item" data-action="import"><span>↑</span> Import Data</div>
+              <div class="more-menu-divider"></div>
+              <div class="more-menu-item danger" data-action="logout"><span>⏻</span> Logout</div>
+            </div>
+          </div>
+          <button class="icon-btn desktop-only" id="bibleBtn" title="Generate Character Bible">📖</button>
+          <button class="icon-btn desktop-only" id="graphViewBtn" title="Relationship Graph">◉</button>
+          <button class="icon-btn desktop-only" id="compareBtn" title="Compare Character Arcs">⊞</button>
+          <button class="icon-btn desktop-only" id="exportBtn" title="Export Data">↓</button>
+          <button class="icon-btn desktop-only" id="importBtn" title="Import Data">↑</button>
+          <button class="icon-btn desktop-only danger" id="logoutBtn" title="Logout">⏻</button>
+        </div>
+      </header>
+
+      <div class="main-content" id="mainContent">
+        <div class="empty-state" id="emptyState">
+          <div class="empty-state-icon">📋</div>
+          <p class="empty-state-text">Select a character or create a new one</p>
+        </div>
+
+        <div id="characterView" style="display: none;">
+          <div class="tabs">
+            <button class="tab active" data-tab="details">Details</button>
+            <button class="tab" data-tab="relationships">Relationships</button>
+            <button class="tab" data-tab="timeline">Timeline</button>
+            <button class="tab" data-tab="notes">Notes</button>
+          </div>
+
+          <div id="tabDetails" class="tab-content">
+            <div class="section">
+              <h3 class="section-title">Basic Information</h3>
+              <div class="field">
+                <label class="field-label">Name</label>
+                <input type="text" class="field-input" id="charName">
+              </div>
+              <div class="field">
+                <label class="field-label">Backstory</label>
+                <textarea class="field-textarea" id="charBackstory" rows="4"></textarea>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3 class="section-title">Psychological Profile</h3>
+              <div class="field-row">
+                <div class="field">
+                  <label class="field-label">Self Esteem (Act 1)</label>
+                  <input type="number" class="field-input" id="charSE1" min="0" max="5" step="0.5" placeholder="0-5">
+                </div>
+                <div class="field">
+                  <label class="field-label">Self Esteem (Act 2)</label>
+                  <input type="number" class="field-input" id="charSE2" min="0" max="5" step="0.5" placeholder="0-5">
+                </div>
+                <div class="field">
+                  <label class="field-label">Self Esteem (Act 3)</label>
+                  <input type="number" class="field-input" id="charSE3" min="0" max="5" step="0.5" placeholder="0-5">
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label class="field-label">Social Reputation (Act 1)</label>
+                  <input type="number" class="field-input" id="charSR1" min="0" max="5" step="0.5" placeholder="0-5">
+                </div>
+                <div class="field">
+                  <label class="field-label">Social Reputation (Act 2)</label>
+                  <input type="number" class="field-input" id="charSR2" min="0" max="5" step="0.5" placeholder="0-5">
+                </div>
+                <div class="field">
+                  <label class="field-label">Social Reputation (Act 3)</label>
+                  <input type="number" class="field-input" id="charSR3" min="0" max="5" step="0.5" placeholder="0-5">
+                </div>
+              </div>
+              <div class="psych-index-display">
+                <span class="psych-label">Psychological Index:</span>
+                <span id="psychIndexDisplay">0</span>
+                <span class="psych-act">(Act 1: <span id="psychAct1">0</span> | Act 2: <span id="psychAct2">0</span> | Act 3: <span id="psychAct3">0</span>)</span>
+              </div>
+              <input type="hidden" id="charPsychIndex">
+            </div>
+
+            <div class="section">
+              <h3 class="section-title">Character Arcs</h3>
+              <div id="arcChartContainer" class="arc-chart-container">
+                <canvas id="arcChart" class="chart-canvas"></canvas>
+              </div>
+            </div>
+
+            <div class="section actions">
+              <button class="btn btn-primary" id="saveCharacterBtn">Save Character</button>
+              <button class="btn btn-danger" id="deleteCharacterBtn">Delete Character</button>
+            </div>
+          </div>
+
+          <div id="tabRelationships" class="tab-content" style="display: none;">
+            <div class="section">
+              <h3 class="section-title">Relationships</h3>
+              <div id="relationshipsList"></div>
+              <button class="btn btn-secondary" id="addRelationshipBtn">+ Add Relationship</button>
+            </div>
+          </div>
+
+          <div id="tabTimeline" class="tab-content" style="display: none;">
+            <div class="section">
+              <h3 class="section-title">Timeline</h3>
+              <div id="timelineList"></div>
+              <button class="btn btn-secondary" id="addTimelineEventBtn">+ Add Event</button>
+            </div>
+          </div>
+
+          <div id="tabNotes" class="tab-content" style="display: none;">
+            <div class="section">
+              <h3 class="section-title">Notes</h3>
+              <div id="notesList"></div>
+              <div class="note-input-row">
+                <input type="text" class="field-input" id="newNoteInput" placeholder="Add a note...">
+                <button class="btn btn-secondary" id="addNoteBtn">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="graphView" class="view-section" style="display: none;">
+          <div class="section">
+            <h3 class="section-title">Relationship Web</h3>
+            <div id="graphContainer" class="graph-container">
+              <svg id="relationshipGraph"></svg>
+            </div>
+          </div>
+        </div>
+
+        <div id="compareView" class="view-section" style="display: none;">
+          <div class="section">
+            <h3 class="section-title">Compare Character Arcs</h3>
+            <div class="compare-select">
+              <label>Select characters to compare:</label>
+              <div id="compareCheckboxes"></div>
+            </div>
+            <div id="compareChartContainer" class="arc-chart-container"></div>
+          </div>
+        </div>
+
+        <div id="exportView" class="view-section" style="display: none;">
+          <div class="section">
+            <h3 class="section-title">Export Data</h3>
+            <div class="export-buttons">
+              <button class="btn btn-primary" id="exportJsonBtn">Export as JSON</button>
+              <button class="btn btn-primary" id="exportCsvBtn">Export as CSV</button>
+              <button class="btn btn-primary" id="printPdfBtn">Print / Save as PDF</button>
+            </div>
+          </div>
+          <div class="section">
+            <h3 class="section-title">Export Character Bible</h3>
+            <div class="export-buttons">
+              <button class="btn btn-primary" id="exportBibleJsonBtn">Export Bible (JSON)</button>
+              <button class="btn btn-primary" id="exportBibleCsvBtn">Export Bible (CSV)</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="importView" class="view-section" style="display: none;">
+          <div class="section">
+            <h3 class="section-title">Import Data</h3>
+            <div class="file-input-wrapper">
+              <input type="file" id="importFile" accept=".json,.csv">
+              <div class="file-input-label">
+                <span>Click to select a JSON or CSV file</span>
+              </div>
+            </div>
+            <div id="importPreview"></div>
+            <button class="btn btn-primary" id="confirmImportBtn" style="display: none;">Import Data</button>
+          </div>
+        </div>
+
+        <div id="aboutView" class="view-section" style="display: none;">
+          <div class="section about-section">
+            <h2 class="about-title">About Persona</h2>
+            <div class="about-content">
+              <p>Persona is a private, offline-first tool designed for writers, actors, and creative professionals who want to build fictional characters with depth and authenticity.</p>
+              <p>Built entirely in your browser, Persona keeps your data safe on your device. We never see or store your work. All character information—from psychological profiles to relationship networks—lives locally, giving you complete privacy while you create.</p>
+              <p>Whether you're developing a complex cast for a novel, preparing character backstories for a film, or simply exploring the emotional arcs of fictional people, Persona helps you track the details that bring characters to life. Map psychological journeys across three acts, visualize relationships, and export comprehensive character bibles for your creative projects.</p>
+              <p>We believe great characters deserve great tools. Persona is free to use, and we're committed to keeping it that way.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="app-footer">
+    <div class="app-footer-warning">🔒 Your data is stored locally - remember to back up your work!</div>
+    <span class="footer-link" id="aboutLink">About</span> | Made with love in Sri Lanka by <a href="https://theena.net/" target="_blank">Theena Kumaragurunathan</a>
+    <br>
+    <span class="license">Licensed under MIT License</span>
+  </footer>
+
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Project Settings</h3>
+        <button class="modal-close" id="closeSettingsModal">&times;</button>
+      </div>
+      <form id="settingsForm">
+        <div class="field">
+          <label class="field-label">Project Title</label>
+          <input type="text" class="field-input" id="settingsProjectTitle">
+        </div>
+        <div class="field">
+          <label class="field-label">Author</label>
+          <input type="text" class="field-input" id="settingsProjectAuthor">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelSettings">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="helpModal">
+    <div class="modal modal-large">
+      <div class="modal-header">
+        <h3 class="modal-title">Help & FAQ</h3>
+        <button class="modal-close" id="closeHelpModal">&times;</button>
+      </div>
+      <div class="help-content">
+        <div class="faq-section">
+          <h4>How do I add characters?</h4>
+          <p>Click the "+ Add Character" button in the header to open the character form. Fill in the name, backstory, and psychological profile details. Click Save to add the character to your project.</p>
+        </div>
+        <div class="faq-section">
+          <h4>How do relationships work?</h4>
+          <p>Open any character's details and go to the Relationships tab. Click "+ Add Relationship" to link other characters. Define the relationship type (e.g., friend, enemy, family) to map connections between your characters.</p>
+        </div>
+        <div class="faq-section">
+          <h4>How do I export my data?</h4>
+          <p>Use the Export button in the header to export your entire character bible as JSON or CSV. You can also generate a printable Character Bible PDF for sharing or printing.</p>
+        </div>
+        <div class="faq-section">
+          <h4>Is my data private?</h4>
+          <p>Yes. Persona is completely offline-first. All your data is stored locally in your browser's storage. We never see or transmit any of your work. Nothing leaves your device unless you explicitly export it.</p>
+        </div>
+        <div class="faq-section">
+          <h4>What are Psychological Profiles?</h4>
+          <p>Each character has a psychological profile based on Self Esteem (how they see themselves) versus Social Reputation (how the world sees them). This difference creates their Psychological Index—a value between -5 and +5 that tracks their emotional journey across three narrative acts.</p>
+          <p class="faq-detail">A high positive index means high self-esteem with low social reputation (a misunderstood hero). A low negative index means low self-esteem with high social reputation (a respected but insecure figure). The index tracks how this gap narrows or widens throughout your story.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="projectModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Manage Projects</h3>
+        <button class="modal-close" id="closeProjectModal">&times;</button>
+      </div>
+      <div class="project-manage-list" id="projectManageList"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="cancelProjectModal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="newProjectModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Create New Project</h3>
+        <button class="modal-close" id="closeNewProjectModal">&times;</button>
+      </div>
+      <form id="newProjectForm">
+        <div class="field">
+          <label class="field-label">Project Name</label>
+          <input type="text" class="field-input" id="newProjectName" placeholder="My New Project" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelNewProjectModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="characterModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">Add Character</h3>
+        <button class="modal-close" id="closeModal">&times;</button>
+      </div>
+      <form id="characterForm">
+        <div class="field">
+          <label class="field-label">Name</label>
+          <input type="text" class="field-input" id="modalCharName" required>
+        </div>
+        <div class="field">
+          <label class="field-label">Backstory</label>
+          <textarea class="field-textarea" id="modalCharBackstory"></textarea>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">Self Esteem (Act 1)</label>
+            <input type="number" class="field-input" id="modalCharSE1" min="0" max="5" step="0.5" placeholder="0-5">
+          </div>
+          <div class="field">
+            <label class="field-label">Self Esteem (Act 2)</label>
+            <input type="number" class="field-input" id="modalCharSE2" min="0" max="5" step="0.5" placeholder="0-5">
+          </div>
+          <div class="field">
+            <label class="field-label">Self Esteem (Act 3)</label>
+            <input type="number" class="field-input" id="modalCharSE3" min="0" max="5" step="0.5" placeholder="0-5">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label class="field-label">Social Reputation (Act 1)</label>
+            <input type="number" class="field-input" id="modalCharSR1" min="0" max="5" step="0.5" placeholder="0-5">
+          </div>
+          <div class="field">
+            <label class="field-label">Social Reputation (Act 2)</label>
+            <input type="number" class="field-input" id="modalCharSR2" min="0" max="5" step="0.5" placeholder="0-5">
+          </div>
+          <div class="field">
+            <label class="field-label">Social Reputation (Act 3)</label>
+            <input type="number" class="field-input" id="modalCharSR3" min="0" max="5" step="0.5" placeholder="0-5">
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="relationshipModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Relationship</h3>
+        <button class="modal-close" id="closeRelationshipModal">&times;</button>
+      </div>
+      <form id="relationshipForm">
+        <div class="field">
+          <label class="field-label">Target Character</label>
+          <select class="field-input" id="relationshipTarget" required></select>
+        </div>
+        <div class="field">
+          <label class="field-label">Relationship Type</label>
+          <input type="text" class="field-input" id="relationshipType" placeholder="e.g., Friend, Enemy, Sibling" required>
+        </div>
+        <div class="field">
+          <label class="field-label">Description</label>
+          <textarea class="field-textarea" id="relationshipDesc"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelRelationshipModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="timelineModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Timeline Event</h3>
+        <button class="modal-close" id="closeTimelineModal">&times;</button>
+      </div>
+      <form id="timelineForm">
+        <div class="field">
+          <label class="field-label">Date</label>
+          <input type="text" class="field-input" id="timelineDate" placeholder="e.g., Day 1, Year 1245">
+        </div>
+        <div class="field">
+          <label class="field-label">Event Title</label>
+          <input type="text" class="field-input" id="timelineTitle" required>
+        </div>
+        <div class="field">
+          <label class="field-label">Description</label>
+          <textarea class="field-textarea" id="timelineDesc"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelTimelineModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Delete Character</h3>
+        <button class="modal-close" id="closeDeleteModal">&times;</button>
+      </div>
+      <p style="margin-bottom: 20px;">Are you sure you want to delete this character? This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancelDelete">Cancel</button>
+        <button class="btn btn-danger" id="confirmDelete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const App = {
+      currentUser: null,
+      currentCharacter: null,
+      characters: [],
+      currentTab: 'details',
+      graphColors: [],
+      graphAxisColor: '',
+      projectTitle: 'Untitled',
+      projectAuthor: '',
+      currentProjectId: null,
+      projects: [],
+
+      init() {
+        try {
+          this.loadTheme();
+          this.checkFirstUse();
+          this.checkAuth();
+          this.bindEvents();
+          this.updateProjectSelector();
+        } catch (e) {
+          console.error('Init error:', e);
+          alert('Error loading app: ' + e.message);
+        }
+      },
+
+      loadProjectSettings() {
+        const settings = JSON.parse(localStorage.getItem('rolecall-project') || '{}');
+        this.projectTitle = settings.title || 'Untitled';
+        this.projectAuthor = settings.author || '';
+        const titleEl = document.getElementById('projectTitle');
+        if (titleEl) titleEl.textContent = this.projectTitle;
+      },
+
+      saveProjectSettings(title, author) {
+        this.projectTitle = title || 'Untitled';
+        this.projectAuthor = author || '';
+        localStorage.setItem('rolecall-project', JSON.stringify({
+          title: this.projectTitle,
+          author: this.projectAuthor
+        }));
+          const titleEl = document.getElementById('projectTitle');
+        if (titleEl) titleEl.textContent = this.projectTitle;
+      },
+
+      // Project Management Functions
+      generateProjectId() {
+        return 'proj-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+      },
+
+      getProjectList() {
+        const list = JSON.parse(localStorage.getItem('rolecall-projects') || '[]');
+        return list.map(pid => {
+          const data = JSON.parse(localStorage.getItem('rolecall-project-' + pid) || '{}');
+          return {
+            id: pid,
+            name: data.name || 'Untitled Project',
+            characterCount: (data.characters || []).length,
+            updatedAt: data.updatedAt || data.createdAt || Date.now()
+          };
+        }).sort((a, b) => b.updatedAt - a.updatedAt);
+      },
+
+      getCurrentProjectId() {
+        return localStorage.getItem('rolecall-current-project');
+      },
+
+      setCurrentProject(projectId) {
+        this.currentProjectId = projectId;
+        localStorage.setItem('rolecall-current-project', projectId);
+        this.loadProjectData();
+      },
+
+      loadProjectData() {
+        const projectId = this.getCurrentProjectId();
+        if (!projectId) {
+          this.characters = [];
+          this.projectTitle = 'Untitled';
+          this.projectAuthor = '';
+          return;
+        }
+        
+        const data = JSON.parse(localStorage.getItem('rolecall-project-' + projectId) || '{}');
+        this.characters = data.characters || [];
+        this.projectTitle = data.title || data.name || 'Untitled';
+        this.projectAuthor = data.author || '';
+        
+        this.renderCharacterList();
+        this.renderEmptyState();
+        this.updateProjectSelector();
+        
+        const titleEl = document.getElementById('projectTitle');
+        if (titleEl) titleEl.textContent = this.projectTitle;
+      },
+
+      saveProjectData() {
+        const projectId = this.getCurrentProjectId();
+        if (!projectId) return;
+        
+        const existing = JSON.parse(localStorage.getItem('rolecall-project-' + projectId) || '{}');
+        const data = {
+          ...existing,
+          id: projectId,
+          name: existing.name || 'Untitled Project',
+          title: this.projectTitle,
+          author: this.projectAuthor,
+          characters: this.characters,
+          updatedAt: Date.now()
+        };
+        localStorage.setItem('rolecall-project-' + projectId, JSON.stringify(data));
+        
+        this.updateProjectSelector();
+      },
+
+      createProject(name) {
+        const projectId = this.generateProjectId();
+        const projectList = JSON.parse(localStorage.getItem('rolecall-projects') || '[]');
+        
+        const projectData = {
+          id: projectId,
+          name: name || 'New Project',
+          title: name || 'Untitled',
+          author: '',
+          characters: [],
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        };
+        
+        localStorage.setItem('rolecall-project-' + projectId, JSON.stringify(projectData));
+        projectList.push(projectId);
+        localStorage.setItem('rolecall-projects', JSON.stringify(projectList));
+        
+        this.setCurrentProject(projectId);
+        this.showToast('Project created: ' + name, 'success');
+        
+        return projectId;
+      },
+
+      deleteProject(projectId) {
+        if (!projectId) return;
+        
+        // Remove project data
+        localStorage.removeItem('rolecall-project-' + projectId);
+        
+        // Remove from project list
+        const projectList = JSON.parse(localStorage.getItem('rolecall-projects') || '[]');
+        const newList = projectList.filter(id => id !== projectId);
+        localStorage.setItem('rolecall-projects', JSON.stringify(newList));
+        
+        // If deleted current project, switch to another or create new
+        if (this.getCurrentProjectId() === projectId) {
+          if (newList.length > 0) {
+            this.setCurrentProject(newList[0]);
+          } else {
+            this.createProject('My First Project');
+          }
+        }
+        
+        this.showToast('Project deleted', 'success');
+      },
+
+      renameProject(projectId, newName) {
+        if (!projectId || !newName) return;
+        
+        const data = JSON.parse(localStorage.getItem('rolecall-project-' + projectId) || '{}');
+        data.name = newName;
+        data.title = newName;
+        data.updatedAt = Date.now();
+        localStorage.setItem('rolecall-project-' + projectId, JSON.stringify(data));
+        
+        if (this.getCurrentProjectId() === projectId) {
+          this.projectTitle = newName;
+          const titleEl = document.getElementById('projectTitle');
+          if (titleEl) titleEl.textContent = newName;
+        }
+        
+        this.updateProjectSelector();
+        this.showToast('Project renamed', 'success');
+      },
+
+      exportProject(projectId) {
+        if (!projectId) return;
+        
+        const data = JSON.parse(localStorage.getItem('rolecall-project-' + projectId) || '{}');
+        const exportData = {
+          version: '1.0',
+          exportedAt: new Date().toISOString(),
+          project: {
+            name: data.name,
+            title: data.title,
+            author: data.author,
+            characters: data.characters
+          }
+        };
+        
+        const filename = (data.name || 'project').toLowerCase().replace(/\s+/g, '-') + '.json';
+        this.downloadFile(JSON.stringify(exportData, null, 2), filename, 'application/json');
+        this.showToast('Project exported', 'success');
+      },
+
+      updateProjectSelector() {
+        const selector = document.getElementById('projectSelector');
+        if (!selector) return;
+        
+        const projects = this.getProjectList();
+        const currentId = this.getCurrentProjectId();
+        const current = projects.find(p => p.id === currentId);
+        
+        selector.innerHTML = `<span class="project-selector-label">${current ? current.name : 'Select Project'}</span><div class="project-dropdown" id="projectDropdown"><div class="project-dropdown-header">Projects</div><div class="project-list" id="projectList"></div><div class="project-dropdown-footer"><button class="btn btn-secondary btn-small" id="newProjectBtn">+ New Project</button><button class="btn btn-secondary btn-small" id="manageProjectsBtn">Manage</button></div></div>`;
+      },
+
+      renderProjectDropdown() {
+        const list = document.getElementById('projectList');
+        if (!list) return;
+        
+        const projects = this.getProjectList();
+        const currentId = this.getCurrentProjectId();
+        
+        if (projects.length === 0) {
+          list.innerHTML = '<div class="project-item">No projects</div>';
+          return;
+        }
+        
+        list.innerHTML = projects.map(p => `
+          <div class="project-item ${p.id === currentId ? 'active' : ''}" data-id="${p.id}">
+            <div class="project-item-name">${this.escapeHtml(p.name)}</div>
+            <div class="project-item-count">${p.characterCount} characters</div>
+          </div>
+        `).join('');
+        
+        // Add click handlers
+        list.querySelectorAll('.project-item').forEach(item => {
+          item.addEventListener('click', () => {
+            const pid = item.dataset.id;
+            if (pid && pid !== currentId) {
+              this.setCurrentProject(pid);
+              document.getElementById('projectSelector').classList.remove('open');
+            }
+          });
+        });
+      },
+
+      renderProjectManageList() {
+        const list = document.getElementById('projectManageList');
+        if (!list) return;
+        
+        const projects = this.getProjectList();
+        const currentId = this.getCurrentProjectId();
+        
+        if (projects.length === 0) {
+          list.innerHTML = '<p style="padding: 20px; text-align: center;">No projects</p>';
+          return;
+        }
+        
+        list.innerHTML = projects.map(p => `
+          <div class="project-manage-item">
+            <div class="project-manage-info">
+              <div class="project-manage-name">${this.escapeHtml(p.name)}</div>
+              <div class="project-manage-meta">${p.characterCount} characters | Last updated: ${new Date(p.updatedAt).toLocaleDateString()}</div>
+            </div>
+            <div class="project-manage-actions">
+              <button class="btn btn-secondary rename-project-btn" data-id="${p.id}" data-name="${this.escapeHtml(p.name)}">Rename</button>
+              <button class="btn btn-secondary export-project-btn" data-id="${p.id}">Export</button>
+              <button class="btn btn-danger delete-project-btn" data-id="${p.id}" ${projects.length === 1 ? 'disabled' : ''}>Delete</button>
+            </div>
+          </div>
+        `).join('');
+        
+        // Add event handlers
+        list.querySelectorAll('.rename-project-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const newName = prompt('Enter new project name:', btn.dataset.name);
+            if (newName && newName.trim()) {
+              this.renameProject(btn.dataset.id, newName.trim());
+              this.renderProjectManageList();
+            }
+          });
+        });
+        
+        list.querySelectorAll('.export-project-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            this.exportProject(btn.dataset.id);
+          });
+        });
+        
+        list.querySelectorAll('.delete-project-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (btn.disabled) return;
+            if (confirm('Are you sure you want to delete this project? This cannot be undone.')) {
+              this.deleteProject(btn.dataset.id);
+              this.renderProjectManageList();
+            }
+          });
+        });
+      },
+
+      checkFirstUse() {
+        const projects = this.getProjectList();
+        const currentId = this.getCurrentProjectId();
+        
+        // If no projects exist, create default
+        if (projects.length === 0) {
+          this.createProject('My First Project');
+          return;
+        }
+        
+        // If projects exist but none selected, select first
+        if (!currentId && projects.length > 0) {
+          this.setCurrentProject(projects[0].id);
+        }
+      },
+
+      getCssVar(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      },
+
+      resolveGraphColors() {
+        this.graphColors = [
+          this.getCssVar('--graph-1'),
+          this.getCssVar('--graph-2'),
+          this.getCssVar('--graph-3'),
+          this.getCssVar('--graph-4'),
+          this.getCssVar('--graph-5'),
+          this.getCssVar('--graph-6'),
+          this.getCssVar('--graph-7'),
+          this.getCssVar('--graph-8')
+        ];
+        this.graphAxisColor = this.getCssVar('--graph-axis');
+      },
+
+      loadTheme() {
+        const savedTheme = localStorage.getItem('rolecall-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        this.resolveGraphColors();
+      },
+
+      toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('rolecall-theme', next);
+        this.resolveGraphColors();
+        if (this.currentCharacter) {
+          this.renderArcChart();
+        }
+        if (document.getElementById('graphView').style.display === 'block') {
+          this.renderGraph();
+        }
+      },
+
+      checkAuth() {
+        const user = localStorage.getItem('rolecall-user');
+        if (user) {
+          this.currentUser = JSON.parse(user);
+          this.showApp();
+        } else {
+          const authScreen = document.getElementById('authScreen');
+          if (authScreen) authScreen.style.display = 'flex';
+        }
+      },
+
+      async hashPassword(password) {
+        // Use Web Crypto API if available (secure context)
+        if (typeof crypto !== 'undefined' && crypto.subtle) {
+          const encoder = new TextEncoder();
+          const data = encoder.encode(password);
+          const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+          const hashArray = Array.from(new Uint8Array(hashBuffer));
+          return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+        // Fallback for file:// protocol - simple hash
+        let hash = 0;
+        for (let i = 0; i < password.length; i++) {
+          const char = password.charCodeAt(i);
+          hash = ((hash << 5) - hash) + char;
+          hash = hash & hash;
+        }
+        return 'fallback_' + Math.abs(hash).toString(16);
+      },
+
+      async register(username, email, password) {
+        const users = JSON.parse(localStorage.getItem('rolecall-users') || '[]');
+        
+        if (users.find(u => u.username === username)) {
+          this.showToast('Username already exists', 'error');
+          return false;
+        }
+        
+        if (users.find(u => u.email === email)) {
+          this.showToast('Email already registered', 'error');
+          return false;
+        }
+
+        const hashedPassword = await this.hashPassword(password);
+        const newUser = { username, email, password: hashedPassword, createdAt: Date.now() };
+        users.push(newUser);
+        localStorage.setItem('rolecall-users', JSON.stringify(users));
+        
+        this.currentUser = { username, email };
+        localStorage.setItem('rolecall-user', JSON.stringify(this.currentUser));
+        
+        this.checkFirstUse();
+        return true;
+      },
+
+      async login(username, password) {
+        const users = JSON.parse(localStorage.getItem('rolecall-users') || '[]');
+        const user = users.find(u => u.username === username);
+        
+        if (!user) {
+          this.showToast('User not found', 'error');
+          return false;
+        }
+
+        const hashedPassword = await this.hashPassword(password);
+        if (user.password !== hashedPassword) {
+          this.showToast('Incorrect password', 'error');
+          return false;
+        }
+
+        this.currentUser = { username: user.username, email: user.email };
+        localStorage.setItem('rolecall-user', JSON.stringify(this.currentUser));
+        
+        this.checkFirstUse();
+        this.loadProjectData();
+        return true;
+      },
+
+      logout() {
+        this.saveUserData();
+        localStorage.removeItem('rolecall-user');
+        this.currentUser = null;
+        this.characters = [];
+        document.getElementById('authScreen').style.display = 'flex';
+        document.getElementById('appScreen').style.display = 'none';
+      },
+
+      initUserData() {
+        const userKey = `rolecall-data-${this.currentUser.username}`;
+        localStorage.setItem(userKey, JSON.stringify([]));
+        this.characters = [];
+        this.renderCharacterList();
+      },
+
+      loadUserData() {
+        const userKey = `rolecall-data-${this.currentUser.username}`;
+        const data = localStorage.getItem(userKey);
+        this.characters = data ? JSON.parse(data) : [];
+        this.renderCharacterList();
+      },
+
+      saveUserData() {
+        // Save to current project
+        this.saveProjectData();
+      },
+
+      showApp() {
+        this.resolveGraphColors();
+        document.getElementById('authScreen').style.display = 'none';
+        document.getElementById('appScreen').style.display = 'flex';
+        this.loadProjectData();
+      },
+
+      calculatePsychIndex() {
+        const se1 = this.clamp(parseFloat(document.getElementById('charSE1').value) || 0, 0, 5);
+        const se2 = this.clamp(parseFloat(document.getElementById('charSE2').value) || 0, 0, 5);
+        const se3 = this.clamp(parseFloat(document.getElementById('charSE3').value) || 0, 0, 5);
+        const sr1 = this.clamp(parseFloat(document.getElementById('charSR1').value) || 0, 0, 5);
+        const sr2 = this.clamp(parseFloat(document.getElementById('charSR2').value) || 0, 0, 5);
+        const sr3 = this.clamp(parseFloat(document.getElementById('charSR3').value) || 0, 0, 5);
+        
+        const psychIndex = [
+          se1 - sr1,
+          se2 - sr2,
+          se3 - sr3
+        ];
+        
+        document.getElementById('charPsychIndex').value = psychIndex.join(', ');
+        
+        // Update display elements
+        const total = psychIndex.reduce((a, b) => a + b, 0);
+        document.getElementById('psychIndexDisplay').textContent = total.toFixed(1);
+        document.getElementById('psychAct1').textContent = psychIndex[0].toFixed(1);
+        document.getElementById('psychAct2').textContent = psychIndex[1].toFixed(1);
+        document.getElementById('psychAct3').textContent = psychIndex[2].toFixed(1);
+        
+        if (this.currentCharacter) {
+          this.currentCharacter.selfEsteem = [se1, se2, se3];
+          this.currentCharacter.socialReputation = [sr1, sr2, sr3];
+          this.currentCharacter.arcPoints = psychIndex;
+        }
+        
+        this.renderArcChart();
+      },
+
+      generateSVGArc(char, width = 300, height = 200) {
+        const points = char.arcPoints || [0, 0, 0];
+        const minVal = -5;  // Fixed range
+        const maxVal = 5;   // Fixed range
+        const range = maxVal - minVal;
+        const padding = 30;
+        
+        const xStep = points.length > 1 ? points.length - 1 : 1;
+        const p = padding;
+        
+        let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`;
+        
+        svg += `<rect width="${width}" height="${height}" fill="white"/>`;
+        
+        // Draw Y-axis values: all integers from -5 to +5
+        for (let i = 0; i <= 10; i++) {
+          const val = maxVal - (maxVal - minVal) * i / 10;
+          const y = p + (height - 2 * p) * i / 10;
+          svg += `<text x="${p - 5}" y="${y + 4}" text-anchor="end" font-size="10" fill="#666">${val}</text>`;
+        }
+        
+        // Y-axis label
+        svg += `<text x="15" y="${height / 2}" text-anchor="middle" font-size="11" fill="#333" transform="rotate(-90, 15, ${height / 2})">Psychological Index</text>`;
+        
+        // X-axis labels
+        svg += `<text x="${width / 2}" y="${height - 25}" text-anchor="middle" font-size="11" fill="#333" font-weight="bold">Narrative Time</text>`;
+        
+        // Act sub-labels (smaller)
+        svg += `<text x="${p}" y="${height - 8}" text-anchor="middle" font-size="9" fill="#666">Act 1</text>`;
+        svg += `<text x="${p + (width - 2 * p) * 1 / 2}" y="${height - 8}" text-anchor="middle" font-size="9" fill="#666">Act 2</text>`;
+        svg += `<text x="${width - p}" y="${height - 8}" text-anchor="middle" font-size="9" fill="#666">Act 3</text>`;
+        
+        // Calculate coordinates for all points
+        const coords = points.map((val, i) => ({
+          x: p + (width - 2 * p) * i / xStep,
+          y: p + (height - 2 * p) * (maxVal - val) / range
+        }));
+        
+        // Build smooth curve path using quadratic Bezier
+        let linePath = '';
+        if (coords.length < 2) {
+          // Single point - no line
+        } else {
+          // Start at first data point
+          linePath = `M ${coords[0].x} ${coords[0].y}`;
+          
+          // Draw curves through each point using midpoints
+          for (let i = 0; i < coords.length - 1; i++) {
+            const currX = coords[i].x;
+            const currY = coords[i].y;
+            const nextMidX = (coords[i].x + coords[i + 1].x) / 2;
+            const nextMidY = (coords[i].y + coords[i + 1].y) / 2;
+            
+            if (i === 0) {
+              linePath += ` Q ${currX} ${currY} ${nextMidX} ${nextMidY}`;
+            } else {
+              linePath += ` Q ${currX} ${currY} ${nextMidX} ${nextMidY}`;
+            }
+          }
+          
+          // Draw final segment to last point
+          const lastIdx = coords.length - 1;
+          linePath += ` L ${coords[lastIdx].x} ${coords[lastIdx].y}`;
+        }
+        
+        svg += `<path d="${linePath}" fill="none" stroke="#ea76cb" stroke-width="2"/>`;
+        
+        svg += `</svg>`;
+        return svg;
+      },
+
+      generateSVGGraph(width = 600, height = 400) {
+        const chars = [...this.characters].sort((a, b) => (a.order || 0) - (b.order || 0));
+        const nodeMap = new Map();
+        const p = 40;
+        
+        chars.forEach((c, i) => {
+          const angle = (2 * Math.PI * i) / chars.length;
+          const radius = Math.min(width, height) / 3;
+          nodeMap.set(c.id, {
+            name: c.name,
+            x: width / 2 + radius * Math.cos(angle),
+            y: height / 2 + radius * Math.sin(angle)
+          });
+        });
+        
+        let svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`;
+        svg += `<rect width="${width}" height="${height}" fill="white"/>`;
+        
+        const links = [];
+        chars.forEach(c => {
+          (c.relationships || []).forEach(r => {
+            if (nodeMap.has(r.targetId)) {
+              links.push({ source: c.id, target: r.targetId });
+            }
+          });
+        });
+        
+        links.forEach(link => {
+          const source = nodeMap.get(link.source);
+          const target = nodeMap.get(link.target);
+          if (source && target) {
+            svg += `<line x1="${source.x}" y1="${source.y}" x2="${target.x}" y2="${target.y}" stroke="#999" stroke-width="1"/>`;
+          }
+        });
+        
+        const colors = ['#d20f39', '#40a02b', '#04a5e5', '#fe640b', '#8839ef', '#df8e1d', '#179299', '#209fb5'];
+        chars.forEach((c, idx) => {
+          const node = nodeMap.get(c.id);
+          if (node) {
+            svg += `<circle cx="${node.x}" cy="${node.y}" r="24" fill="${colors[idx % 8]}" stroke="#fff" stroke-width="2"/>`;
+            svg += `<text x="${node.x}" y="${node.y}" text-anchor="middle" dominant-baseline="middle" font-size="10" font-weight="bold" fill="white">${c.name.substring(0, 2).toUpperCase()}</text>`;
+          }
+        });
+        
+        svg += `</svg>`;
+        return svg;
+      },
+
+      generateCharacterBible() {
+        const chars = [...this.characters].sort((a, b) => (a.order || 0) - (b.order || 0));
+        const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        
+        let html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>${this.escapeHtml(this.projectTitle)} - Character Bible</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Georgia, 'Times New Roman', serif; color: #333; line-height: 1.6; padding: 40px; max-width: 800px; margin: 0 auto; }
+    h1 { font-size: 2.5em; margin-bottom: 10px; }
+    h2 { font-size: 1.5em; margin: 30px 0 15px; border-bottom: 2px solid #333; padding-bottom: 5px; }
+    h3 { font-size: 1.2em; margin: 20px 0 10px; color: #555; }
+    p { margin-bottom: 15px; }
+    .cover { text-align: center; padding: 100px 0; }
+    .cover h1 { font-size: 3em; margin-bottom: 20px; }
+    .cover .author { font-size: 1.2em; color: #666; }
+    .cover .date { font-size: 1em; color: #999; margin-top: 40px; }
+    .character { page-break-inside: avoid; margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+    .character-name { font-size: 1.8em; margin-bottom: 10px; }
+    .backstory { font-style: italic; color: #555; margin-bottom: 15px; }
+    table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+    th { background: #f5f5f5; }
+    .arc-chart { text-align: center; margin: 20px 0; }
+    .relationships { margin-top: 10px; }
+    .relationship-tag { display: inline-block; background: #f0f0f0; padding: 4px 10px; margin: 2px; border-radius: 3px; font-size: 0.9em; }
+    .timeline-event { margin-bottom: 10px; padding-left: 15px; border-left: 2px solid #ddd; }
+    .timeline-date { font-weight: bold; color: #666; }
+    .appendix { margin-top: 40px; }
+    .chronological-event { margin-bottom: 8px; }
+    @media print {
+      body { padding: 20px; }
+      @page { size: A4 portrait; margin: 15mm; }
+    }
+    }
+  </style>
+</head>
+<body>
+  <div class="cover">
+    <h1>${this.escapeHtml(this.projectTitle)}</h1>
+    <p class="author">By ${this.escapeHtml(this.projectAuthor || 'Unknown Author')}</p>
+    <p class="date">Generated on ${today}</p>
+  </div>
+  
+  <h2>Character Profiles</h2>`;
+        
+        chars.forEach(char => {
+          const se = char.selfEsteem || [0, 0, 0];
+          const sr = char.socialReputation || [0, 0, 0];
+          const pi = char.arcPoints || [0, 0, 0];
+          
+          html += `
+  <div class="character">
+    <h3 class="character-name">${this.escapeHtml(char.name)}</h3>
+    <p class="backstory">${this.escapeHtml(char.backstory || 'No backstory available.')}</p>
+    
+    <table>
+      <tr><th></th><th>Act 1</th><th>Act 2</th><th>Act 3</th></tr>
+      <tr><th>Self Esteem</th><td>${se[0]}</td><td>${se[1]}</td><td>${se[2]}</td></tr>
+      <tr><th>Social Reputation</th><td>${sr[0]}</td><td>${sr[1]}</td><td>${sr[2]}</td></tr>
+      <tr><th>Psychological Index</th><td>${pi[0]}</td><td>${pi[1]}</td><td>${pi[2]}</td></tr>
+    </table>
+    
+    <div class="arc-chart">
+      ${this.generateSVGArc(char, 280, 180)}
+    </div>`;
+          
+          if (char.relationships && char.relationships.length > 0) {
+            html += `<div class="relationships">`;
+            char.relationships.forEach(r => {
+              const target = chars.find(c => c.id === r.targetId);
+              if (target) {
+                html += `<span class="relationship-tag">${this.escapeHtml(target.name)} - ${this.escapeHtml(r.type)}</span>`;
+              }
+            });
+            html += `</div>`;
+          }
+          
+          if (char.timeline && char.timeline.length > 0) {
+            html += `<h3>Timeline</h3>`;
+            char.timeline.forEach(e => {
+              html += `<div class="timeline-event"><span class="timeline-date">${this.escapeHtml(e.date || '')}</span>: ${this.escapeHtml(e.title)}${e.desc ? ' - ' + this.escapeHtml(e.desc) : ''}</div>`;
+            });
+          }
+          
+          html += `</div>`;
+        });
+        
+        const allEvents = [];
+        chars.forEach(char => {
+          (char.timeline || []).forEach(e => {
+            allEvents.push({ date: e.date, title: e.title, desc: e.desc });
+          });
+        });
+        allEvents.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+        
+        if (allEvents.length > 0) {
+          html += `
+  <h2 class="appendix">Appendix: Chronological Timeline</h2>`;
+          allEvents.forEach(e => {
+            html += `<div class="chronological-event"><span class="timeline-date">${this.escapeHtml(e.date || '')}</span>: ${this.escapeHtml(e.title)}${e.desc ? ' - ' + this.escapeHtml(e.desc) : ''}</div>`;
+          });
+        }
+        
+        html += `
+</body>
+</html>`;
+        
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(html);
+        printWindow.document.close();
+        printWindow.onload = () => {
+          printWindow.print();
+        };
+      },
+
+      clamp(val, min, max) {
+        return Math.min(Math.max(val, min), max);
+      },
+
+      generateId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2);
+      },
+
+      createCharacter(data) {
+        const se1 = this.clamp(parseFloat(data.se1) || 0, 0, 5);
+        const se2 = this.clamp(parseFloat(data.se2) || 0, 0, 5);
+        const se3 = this.clamp(parseFloat(data.se3) || 0, 0, 5);
+        const sr1 = this.clamp(parseFloat(data.sr1) || 0, 0, 5);
+        const sr2 = this.clamp(parseFloat(data.sr2) || 0, 0, 5);
+        const sr3 = this.clamp(parseFloat(data.sr3) || 0, 0, 5);
+        
+        const arcPoints = [
+          se1 - sr1,
+          se2 - sr2,
+          se3 - sr3
+        ];
+        
+        const character = {
+          id: this.generateId(),
+          name: data.name,
+          backstory: data.backstory || '',
+          selfEsteem: [se1, se2, se3],
+          socialReputation: [sr1, sr2, sr3],
+          arcPoints: arcPoints,
+          relationships: [],
+          timeline: [],
+          notes: [],
+          order: this.characters.length,
+          createdAt: Date.now(),
+          updatedAt: Date.now()
+        };
+        this.characters.push(character);
+        this.saveUserData();
+        this.renderCharacterList();
+        return character;
+      },
+
+      updateCharacter(id, data) {
+        const index = this.characters.findIndex(c => c.id === id);
+        if (index === -1) return;
+        
+        const se1 = this.clamp(parseFloat(data.se1) || 0, 0, 5);
+        const se2 = this.clamp(parseFloat(data.se2) || 0, 0, 5);
+        const se3 = this.clamp(parseFloat(data.se3) || 0, 0, 5);
+        const sr1 = this.clamp(parseFloat(data.sr1) || 0, 0, 5);
+        const sr2 = this.clamp(parseFloat(data.sr2) || 0, 0, 5);
+        const sr3 = this.clamp(parseFloat(data.sr3) || 0, 0, 5);
+        
+        const arcPoints = [
+          se1 - sr1,
+          se2 - sr2,
+          se3 - sr3
+        ];
+        
+        this.characters[index] = {
+          ...this.characters[index],
+          name: data.name,
+          backstory: data.backstory || '',
+          selfEsteem: [se1, se2, se3],
+          socialReputation: [sr1, sr2, sr3],
+          arcPoints: arcPoints,
+          updatedAt: Date.now()
+        };
+        
+        this.saveUserData();
+        this.renderCharacterList();
+        this.showCharacter(this.characters[index]);
+      },
+
+      deleteCharacter(id) {
+        this.characters = this.characters.filter(c => c.id !== id);
+        this.characters.forEach(c => {
+          c.relationships = c.relationships.filter(r => r.targetId !== id);
+        });
+        this.saveUserData();
+        this.renderCharacterList();
+        this.currentCharacter = null;
+        document.getElementById('characterView').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'flex';
+      },
+
+      selectCharacter(id) {
+        const character = this.characters.find(c => c.id === id);
+        if (character) {
+          this.showCharacter(character);
+        }
+      },
+
+      showCharacter(character) {
+        this.currentCharacter = character;
+        document.getElementById('emptyState').style.display = 'none';
+        document.getElementById('characterView').style.display = 'block';
+        document.getElementById('mainTitle').textContent = character.name;
+
+        document.getElementById('charName').value = character.name;
+        document.getElementById('charBackstory').value = character.backstory;
+        
+        const se = character.selfEsteem || [0, 0, 0];
+        const sr = character.socialReputation || [0, 0, 0];
+        
+        document.getElementById('charSE1').value = se[0];
+        document.getElementById('charSE2').value = se[1];
+        document.getElementById('charSE3').value = se[2];
+        document.getElementById('charSR1').value = sr[0];
+        document.getElementById('charSR2').value = sr[1];
+        document.getElementById('charSR3').value = sr[2];
+        
+        const arcPoints = character.arcPoints || [0, 0, 0];
+        document.getElementById('charPsychIndex').value = arcPoints.join(', ');
+        
+        // Update psychological index display
+        const psychIndex = arcPoints;
+        const total = psychIndex.reduce((a, b) => a + b, 0);
+        document.getElementById('psychIndexDisplay').textContent = total.toFixed(1);
+        document.getElementById('psychAct1').textContent = psychIndex[0].toFixed(1);
+        document.getElementById('psychAct2').textContent = psychIndex[1].toFixed(1);
+        document.getElementById('psychAct3').textContent = psychIndex[2].toFixed(1);
+
+        this.renderRelationships();
+        this.renderTimeline();
+        this.renderNotes();
+        this.renderArcChart();
+
+        // Update relationship web if it's currently visible
+        if (document.getElementById('graphView').style.display === 'block') {
+          this.renderGraph();
+        }
+
+        document.querySelectorAll('.character-item').forEach(item => {
+          item.classList.toggle('active', item.dataset.id === character.id);
+        });
+      },
+
+      renderEmptyState() {
+        const emptyState = document.getElementById('emptyState');
+        const characterView = document.getElementById('characterView');
+        if (emptyState && characterView) {
+          if (this.characters.length === 0) {
+            emptyState.style.display = 'flex';
+            characterView.style.display = 'none';
+          } else if (!this.currentCharacter) {
+            emptyState.style.display = 'flex';
+            characterView.style.display = 'none';
+          } else {
+            emptyState.style.display = 'none';
+          }
+        }
+      },
+
+      renderCharacterList(filter = 'all', search = '') {
+        const list = document.getElementById('characterList');
+        let chars = [...this.characters];
+
+        if (search) {
+          const s = search.toLowerCase();
+          chars = chars.filter(c => c.name.toLowerCase().includes(s));
+        }
+
+        if (filter === 'recent') {
+          chars.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+          chars = chars.slice(0, 10);
+        } else {
+          chars.sort((a, b) => (a.order || 0) - (b.order || 0));
+        }
+
+        list.innerHTML = chars.map((c, idx) => `
+          <div class="character-item ${this.currentCharacter?.id === c.id ? 'active' : ''}" data-id="${c.id}">
+            <div class="character-item-controls">
+              <button class="order-btn" data-action="up" data-id="${c.id}" title="Move up" ${idx === 0 ? 'disabled' : ''}>↑</button>
+              <button class="order-btn" data-action="down" data-id="${c.id}" title="Move down" ${idx === chars.length - 1 ? 'disabled' : ''}>↓</button>
+            </div>
+            <div class="character-item-content">
+              <div class="character-item-name">${this.escapeHtml(c.name)}</div>
+              <div class="character-item-meta">${c.relationships.length} relationships</div>
+            </div>
+          </div>
+        `).join('');
+
+        list.querySelectorAll('.character-item').forEach(item => {
+          item.addEventListener('click', (e) => {
+            if (e.target.classList.contains('order-btn')) return;
+            this.selectCharacter(item.dataset.id);
+          });
+        });
+
+        list.querySelectorAll('.order-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const action = btn.dataset.action;
+            const id = btn.dataset.id;
+            if (action === 'up') this.moveCharacterUp(id);
+            else this.moveCharacterDown(id);
+          });
+        });
+      },
+
+      moveCharacterUp(id) {
+        const idx = this.characters.findIndex(c => c.id === id);
+        if (idx <= 0) return;
+        const temp = this.characters[idx].order;
+        this.characters[idx].order = this.characters[idx - 1].order;
+        this.characters[idx - 1].order = temp;
+        this.saveUserData();
+        this.renderCharacterList();
+      },
+
+      moveCharacterDown(id) {
+        const idx = this.characters.findIndex(c => c.id === id);
+        if (idx < 0 || idx >= this.characters.length - 1) return;
+        const temp = this.characters[idx].order;
+        this.characters[idx].order = this.characters[idx + 1].order;
+        this.characters[idx + 1].order = temp;
+        this.saveUserData();
+        this.renderCharacterList();
+      },
+
+      renderRelationships() {
+        const list = document.getElementById('relationshipsList');
+        const rels = this.currentCharacter?.relationships || [];
+        
+        list.innerHTML = rels.map(r => {
+          const target = this.characters.find(c => c.id === r.targetId);
+          if (!target) return '';
+          return `
+            <div class="relationship-tag">
+              <span>${this.escapeHtml(target.name)} - ${this.escapeHtml(r.type)}</span>
+              <button data-target="${r.targetId}" title="Remove">&times;</button>
+            </div>
+          `;
+        }).join('');
+
+        list.querySelectorAll('button').forEach(btn => {
+          btn.addEventListener('click', () => this.removeRelationship(btn.dataset.target));
+        });
+      },
+
+      addRelationship(targetId, type) {
+        if (!this.currentCharacter) return;
+        if (targetId === this.currentCharacter.id) {
+          this.showToast('Cannot create relationship with self', 'error');
+          return;
+        }
+        
+        const exists = this.currentCharacter.relationships.find(r => r.targetId === targetId);
+        if (exists) {
+          this.showToast('Relationship already exists', 'error');
+          return;
+        }
+
+        this.currentCharacter.relationships.push({ targetId, type });
+        this.saveUserData();
+        this.renderRelationships();
+        
+        const target = this.characters.find(c => c.id === targetId);
+        if (target && !target.relationships.find(r => r.targetId === this.currentCharacter.id)) {
+          target.relationships.push({ targetId: this.currentCharacter.id, type });
+          this.saveUserData();
+        }
+      },
+
+      removeRelationship(targetId) {
+        if (!this.currentCharacter) return;
+        this.currentCharacter.relationships = this.currentCharacter.relationships.filter(r => r.targetId !== targetId);
+        
+        const target = this.characters.find(c => c.id === targetId);
+        if (target) {
+          target.relationships = target.relationships.filter(r => r.targetId !== this.currentCharacter.id);
+          this.saveUserData();
+        }
+        
+        this.renderRelationships();
+      },
+
+      renderTimeline() {
+        const container = document.getElementById('timelineList');
+        const events = this.currentCharacter?.timeline || [];
+        
+        container.innerHTML = events.map(e => `
+          <div class="timeline-event">
+            <div class="timeline-date">${this.escapeHtml(e.date)}</div>
+            <div class="timeline-title">${this.escapeHtml(e.title)}</div>
+            <div class="timeline-desc">${this.escapeHtml(e.desc)}</div>
+          </div>
+        `).join('');
+      },
+
+      addTimelineEvent(title, date, desc) {
+        if (!this.currentCharacter) return;
+        this.currentCharacter.timeline.push({ title, date, desc });
+        this.saveUserData();
+        this.renderTimeline();
+      },
+
+      renderNotes() {
+        const list = document.getElementById('notesList');
+        const notes = this.currentCharacter?.notes || [];
+        
+        list.innerHTML = notes.map(n => `
+          <div class="note-item">
+            <div class="note-header">
+              <span class="note-date">${new Date(n.createdAt).toLocaleDateString()}</span>
+              <button data-id="${n.id}" style="background:none;border:none;color:var(--text-muted);cursor:pointer;">&times;</button>
+            </div>
+            <div class="note-content">${this.escapeHtml(n.content)}</div>
+          </div>
+        `).join('');
+
+        list.querySelectorAll('button').forEach(btn => {
+          btn.addEventListener('click', () => {
+            this.currentCharacter.notes = this.currentCharacter.notes.filter(n => n.id !== btn.dataset.id);
+            this.saveUserData();
+            this.renderNotes();
+          });
+        });
+      },
+
+      addNote(content) {
+        if (!this.currentCharacter || !content.trim()) return;
+        this.currentCharacter.notes.push({
+          id: this.generateId(),
+          content: content.trim(),
+          createdAt: Date.now()
+        });
+        this.saveUserData();
+        this.renderNotes();
+        document.getElementById('newNoteInput').value = '';
+      },
+
+      renderArcChart(characters = null, targetCanvas = 'arcChart') {
+        const canvas = document.getElementById(targetCanvas);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        
+        const charsToRender = characters || (this.currentCharacter ? [this.currentCharacter] : []);
+        if (charsToRender.length === 0) return;
+        
+        const allPoints = charsToRender.map(c => c.arcPoints || [0]);
+        const flatPoints = allPoints.flat();
+        
+        const minVal = -5;  // Fixed range
+        const maxVal = 5;   // Fixed range
+        const range = maxVal - minVal;
+        
+        canvas.width = canvas.offsetWidth * 2;
+        canvas.height = canvas.offsetHeight * 2;
+        ctx.scale(2, 2);
+
+        const width = canvas.offsetWidth;
+        const height = canvas.offsetHeight;
+        const p = 40;
+        const resolvedColors = this.graphColors.length ? this.graphColors : [
+          '#f38ba8', '#a6e3a1', '#89dceb', '#fab387', '#cba6f7', '#f9e2af', '#94e2d5', '#74c7ec'
+        ];
+        const axisColor = this.graphAxisColor || '#6c7086';
+        const textColor = this.getCssVar('--text') || '#cdd6f4';
+
+        ctx.clearRect(0, 0, width, height);
+        
+        ctx.strokeStyle = axisColor;
+        ctx.lineWidth = 1;
+        
+        const chartXStep = 2; // points.length - 1 for 3 points
+        
+        // Draw Y-axis values: all integers from -5 to +5
+        for (let i = 0; i <= 10; i++) {
+          const val = maxVal - (maxVal - minVal) * i / 10;
+          const y = p + (height - 2 * p) * i / 10;
+          
+          ctx.fillStyle = axisColor;
+          ctx.font = '11px sans-serif';
+          ctx.textAlign = 'right';
+          ctx.fillText(Math.round(val).toString(), p - 10, y + 4);
+        }
+
+        // Y-axis label
+        ctx.save();
+        ctx.translate(15, height / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.fillStyle = axisColor;
+        ctx.font = 'bold 11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Psychological Index', 0, 0);
+        ctx.restore();
+
+        // X-axis labels
+        ctx.fillStyle = axisColor;
+        ctx.font = '11px sans-serif';
+        ctx.textAlign = 'center';
+        
+        // Main X-axis label
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText('Narrative Time', width / 2, height - 20);
+        
+        // Act sub-labels (smaller)
+        ctx.font = '9px sans-serif';
+        ctx.fillText('Act 1', p + (width - 2 * p) * 0 / chartXStep, height - 8);
+        ctx.fillText('Act 2', p + (width - 2 * p) * 1 / chartXStep, height - 8);
+        ctx.fillText('Act 3', p + (width - 2 * p) * 2 / chartXStep, height - 8);
+        
+        if (charsToRender.length > 1) {
+          ctx.font = 'bold 12px sans-serif';
+          ctx.fillStyle = textColor;
+          ctx.fillText('Character Arcs Comparison', width / 2, 20);
+        }
+
+        charsToRender.forEach((char, charIndex) => {
+          const points = char.arcPoints || [0];
+          const color = resolvedColors[charIndex % 8];
+          const xStep = points.length > 1 ? points.length - 1 : 1;
+          
+          if (points.length < 2) {
+            // Single point - just draw the dot
+            const val = points[0];
+            const x = p + (width - 2 * p) * 0.5;
+            const y = p + (height - 2 * p) * (maxVal - val) / (maxVal - minVal);
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+            return;
+          }
+          
+          // Calculate all point coordinates
+          const coords = points.map((val, i) => ({
+            x: p + (width - 2 * p) * i / xStep,
+            y: p + (height - 2 * p) * (maxVal - val) / (maxVal - minVal)
+          }));
+          
+          // Draw smooth curve using quadratic Bezier
+          ctx.strokeStyle = color;
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          
+          // Start at first point
+          ctx.moveTo(coords[0].x, coords[0].y);
+          
+          // Draw curves through each point using midpoints as endpoints
+          for (let i = 0; i < coords.length - 1; i++) {
+            const startX = i === 0 ? coords[0].x : (coords[i - 1].x + coords[i].x) / 2;
+            const startY = i === 0 ? coords[0].y : (coords[i - 1].y + coords[i].y) / 2;
+            const controlX = coords[i].x;
+            const controlY = coords[i].y;
+            const endX = (coords[i].x + coords[i + 1].x) / 2;
+            const endY = (coords[i].y + coords[i + 1].y) / 2;
+            
+            if (i === 0) {
+              ctx.moveTo(startX, startY);
+              ctx.quadraticCurveTo(controlX, controlY, endX, endY);
+            } else {
+              ctx.quadraticCurveTo(controlX, controlY, endX, endY);
+            }
+          }
+          
+          // Draw final segment to last point
+          const lastIdx = coords.length - 1;
+          const lastMidX = (coords[lastIdx - 1].x + coords[lastIdx].x) / 2;
+          const lastMidY = (coords[lastIdx - 1].y + coords[lastIdx].y) / 2;
+          ctx.quadraticCurveTo(coords[lastIdx].x, coords[lastIdx].y, coords[lastIdx].x, coords[lastIdx].y);
+          ctx.lineTo(coords[lastIdx].x, coords[lastIdx].y);
+          
+          ctx.stroke();
+          
+          // Draw character name label at end of curve
+          ctx.fillStyle = color;
+          ctx.font = 'bold 11px sans-serif';
+          ctx.textAlign = 'left';
+          // Offset labels vertically based on character index to avoid overlap
+          const labelOffset = (charIndex % 5) * 14 - 28;
+          const labelY = coords[lastIdx].y + labelOffset;
+          const labelX = coords[lastIdx].x + 8;
+          // Truncate long names
+          const labelName = char.name.length > 12 ? char.name.substring(0, 10) + '...' : char.name;
+          ctx.fillText(labelName, labelX, labelY);
+        });
+      },
+
+      renderCompareArcs() {
+        const container = document.getElementById('compareChartContainer');
+        container.innerHTML = '';
+        
+        const chars = this.characters.filter(c => (c.arcPoints || []).length > 0);
+        
+        let selected = this.compareSelected || [];
+        
+        container.innerHTML = `
+          <div class="compare-arcs-header">
+            <p class="compare-instructions">Select up to 5 characters to compare:</p>
+            <div class="compare-select-grid">
+              ${chars.slice(0, 15).map((c, i) => `
+                <label class="compare-checkbox ${selected.find(sc => sc.id === c.id) ? 'selected' : ''}">
+                  <input type="checkbox" value="${c.id}" ${selected.find(sc => sc.id === c.id) ? 'checked' : ''}>
+                  <span>${this.escapeHtml(c.name)}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+          <div class="chart-container" style="margin-top: 20px;">
+            <canvas id="compareArcsChart" class="chart-canvas"></canvas>
+          </div>
+        `;
+        
+        container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.addEventListener('change', (e) => {
+            const charId = e.target.value;
+            const char = chars.find(c => c.id === charId);
+            
+            if (e.target.checked) {
+              if (selected.length < 5) {
+                selected.push(char);
+              } else {
+                e.target.checked = false;
+                this.showToast('Maximum 5 characters', 'error');
+                return;
+              }
+            } else {
+              selected = selected.filter(c => c.id !== charId);
+            }
+            
+            this.compareSelected = selected;
+            
+            e.target.closest('.compare-checkbox').classList.toggle('selected', e.target.checked);
+            
+            if (selected.length > 0) {
+              this.renderArcChart(selected, 'compareArcsChart');
+            }
+          });
+        });
+        
+        if (selected.length > 0) {
+          setTimeout(() => this.renderArcChart(selected, 'compareArcsChart'), 100);
+        }
+      },
+
+      renderGraph() {
+        const svg = document.getElementById('relationshipGraph');
+        const container = document.getElementById('graphContainer');
+        if (!svg || !container) return;
+        
+        let width = container.offsetWidth;
+        let height = container.offsetHeight;
+        
+        // Fallback if dimensions are 0
+        if (width === 0 || height === 0) {
+          width = 800;
+          height = 500;
+        }
+        
+        // Get selected character - show their connections
+        let graphChars = [];
+        let links = [];
+        
+        if (this.currentCharacter) {
+          // Show selected character and anyone they connect to
+          const selectedId = this.currentCharacter.id;
+          const connectedIds = new Set();
+          connectedIds.add(selectedId);
+          
+          // Find all relationships involving selected character
+          (this.currentCharacter.relationships || []).forEach(r => {
+            connectedIds.add(r.targetId);
+          });
+          
+          // Also find characters that reference this character
+          this.characters.forEach(c => {
+            (c.relationships || []).forEach(r => {
+              if (r.targetId === selectedId) {
+                connectedIds.add(c.id);
+              }
+            });
+          });
+          
+          // Get all connected characters
+          graphChars = this.characters.filter(c => connectedIds.has(c.id));
+          
+          // Build links for selected character
+          (this.currentCharacter.relationships || []).forEach(r => {
+            if (connectedIds.has(r.targetId)) {
+              links.push({ source: selectedId, target: r.targetId, type: r.type });
+            }
+          });
+          
+          // Add reverse links
+          this.characters.forEach(c => {
+            if (c.id !== selectedId) {
+              (c.relationships || []).forEach(r => {
+                if (r.targetId === selectedId) {
+                  links.push({ source: c.id, target: selectedId, type: r.type });
+                }
+              });
+            }
+          });
+        } else {
+          // No selection - show all characters with relationships
+          graphChars = this.characters.slice(0, 20);
+          const graphCharIds = new Set(graphChars.map(c => c.id));
+          
+          graphChars.forEach(c => {
+            (c.relationships || []).forEach(r => {
+              if (graphCharIds.has(r.targetId)) {
+                links.push({ source: c.id, target: r.targetId, type: r.type });
+              }
+            });
+          });
+        }
+        
+        if (graphChars.length === 0) {
+          // Still show the selected character even if they have no relationships
+          if (this.currentCharacter) {
+            graphChars = [this.currentCharacter];
+          } else {
+            return;
+          }
+        }
+        
+        const nodeMap = new Map();
+        graphChars.forEach((c, i) => {
+          const angle = (2 * Math.PI * i) / graphChars.length;
+          const radius = Math.min(width, height) / 3;
+          nodeMap.set(c.id, {
+            id: c.id,
+            name: c.name,
+            x: width / 2 + radius * Math.cos(angle),
+            y: height / 2 + radius * Math.sin(angle),
+            vx: 0,
+            vy: 0
+          });
+        });
+
+        const iterations = 100;
+        const repulsion = 5000;
+        const attraction = 0.01;
+        const damping = 0.9;
+        
+        for (let iter = 0; iter < iterations; iter++) {
+          nodeMap.forEach(node => {
+            nodeMap.forEach(other => {
+              if (node.id !== other.id) {
+                const dx = node.x - other.x;
+                const dy = node.y - other.y;
+                const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+                const force = repulsion / (dist * dist);
+                node.vx += (dx / dist) * force;
+                node.vy += (dy / dist) * force;
+              }
+            });
+          });
+          
+          links.forEach(link => {
+            const source = nodeMap.get(link.source);
+            const target = nodeMap.get(link.target);
+            if (source && target) {
+              const dx = target.x - source.x;
+              const dy = target.y - source.y;
+              source.vx += dx * attraction;
+              source.vy += dy * attraction;
+              target.vx -= dx * attraction;
+              target.vy -= dy * attraction;
+            }
+          });
+          
+          const centerX = width / 2;
+          const centerY = height / 2;
+          nodeMap.forEach(node => {
+            node.vx += (centerX - node.x) * 0.001;
+            node.vy += (centerY - node.y) * 0.001;
+          });
+          
+          nodeMap.forEach(node => {
+            node.x += node.vx;
+            node.y += node.vy;
+            node.vx *= damping;
+            node.vy *= damping;
+            
+            node.x = Math.max(40, Math.min(width - 40, node.x));
+            node.y = Math.max(40, Math.min(height - 40, node.y));
+          });
+        }
+
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+        svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        svg.innerHTML = ''; // Clear previous content
+        
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('class', 'graph-content');
+        
+        let linksGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        linksGroup.setAttribute('class', 'graph-links');
+        
+        const axisColor = this.graphAxisColor || '#6c7086';
+        
+        links.forEach(link => {
+          const source = nodeMap.get(link.source);
+          const target = nodeMap.get(link.target);
+          if (source && target) {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', source.x);
+            line.setAttribute('y1', source.y);
+            line.setAttribute('x2', target.x);
+            line.setAttribute('y2', target.y);
+            line.setAttribute('stroke', axisColor);
+            line.setAttribute('stroke-width', '2');
+            line.setAttribute('stroke-opacity', '0.6');
+            line.setAttribute('fill', 'none');
+            line.setAttribute('class', 'graph-link');
+            line.setAttribute('data-type', link.type);
+            linksGroup.appendChild(line);
+          }
+        });
+        g.appendChild(linksGroup);
+        
+        const nodesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        nodesGroup.setAttribute('class', 'graph-nodes');
+        
+        const resolvedNodeColors = this.graphColors.length ? this.graphColors : [
+          '#f38ba8', '#a6e3a1', '#89dceb', '#fab387', '#cba6f7', '#f9e2af', '#94e2d5', '#74c7ec'
+        ];
+        const surfaceColor = this.getCssVar('--surface') || '#313244';
+        const baseColor = this.getCssVar('--base') || '#1e1e2e';
+        const textColor = this.getCssVar('--text') || '#cdd6f4';
+        
+        nodeMap.forEach((node, idx) => {
+          const nodeG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          nodeG.setAttribute('class', 'graph-node');
+          nodeG.setAttribute('data-id', node.id);
+          nodeG.setAttribute('transform', `translate(${node.x}, ${node.y})`);
+          
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('r', '32');
+          circle.setAttribute('fill', resolvedNodeColors[idx % 8]);
+          circle.setAttribute('stroke', surfaceColor);
+          circle.setAttribute('stroke-width', '3');
+          nodeG.appendChild(circle);
+          
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('dominant-baseline', 'middle');
+          text.setAttribute('fill', baseColor);
+          text.setAttribute('font-size', '13');
+          text.setAttribute('font-weight', 'bold');
+          text.setAttribute('pointer-events', 'none');
+          text.textContent = node.name.substring(0, 2).toUpperCase();
+          nodeG.appendChild(text);
+          
+          const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          label.setAttribute('text-anchor', 'middle');
+          label.setAttribute('y', '48');
+          label.setAttribute('fill', textColor);
+          label.setAttribute('font-size', '11');
+          label.setAttribute('font-weight', '500');
+          label.setAttribute('pointer-events', 'none');
+          label.textContent = node.name.length > 14 ? node.name.substring(0, 12) + '...' : node.name;
+          nodeG.appendChild(label);
+          
+          nodesGroup.appendChild(nodeG);
+        });
+        g.appendChild(nodesGroup);
+        
+        svg.innerHTML = '';
+        svg.appendChild(g);
+        
+        if (graphChars.length === 0) {
+          container.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 40px;">No relationships to display. Select a character with relationships.</p>';
+          return;
+        }
+        
+        let scale = 1;
+        let translateX = 0;
+        let translateY = 0;
+        let isDragging = false;
+        let startX, startY;
+        
+        const updateTransform = () => {
+          g.setAttribute('transform', `translate(${translateX}, ${translateY}) scale(${scale})`);
+        };
+        
+        svg.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          const delta = e.deltaY > 0 ? 0.9 : 1.1;
+          scale = Math.max(0.3, Math.min(3, scale * delta));
+          updateTransform();
+        });
+        
+        svg.addEventListener('mousedown', (e) => {
+          if (e.target.classList.contains('graph-node') || e.target.tagName === 'circle' || e.target.tagName === 'text') return;
+          isDragging = true;
+          startX = e.clientX - translateX;
+          startY = e.clientY - translateY;
+          svg.style.cursor = 'grabbing';
+        });
+        
+        svg.addEventListener('mousemove', (e) => {
+          if (!isDragging) return;
+          translateX = e.clientX - startX;
+          translateY = e.clientY - startY;
+          updateTransform();
+        });
+        
+        svg.addEventListener('mouseup', () => {
+          isDragging = false;
+          svg.style.cursor = 'grab';
+        });
+        
+        svg.addEventListener('mouseleave', () => {
+          isDragging = false;
+          svg.style.cursor = 'grab';
+        });
+        
+        svg.style.cursor = 'grab';
+        
+        svg.querySelectorAll('.graph-node').forEach(node => {
+          node.style.cursor = 'pointer';
+          node.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.selectCharacter(node.dataset.id);
+          });
+          
+          node.addEventListener('mouseenter', () => {
+            node.querySelector('circle').setAttribute('stroke-width', '4');
+            node.querySelector('circle').setAttribute('r', '32');
+          });
+          
+          node.addEventListener('mouseleave', () => {
+            node.querySelector('circle').setAttribute('stroke-width', '3');
+            node.querySelector('circle').setAttribute('r', '28');
+          });
+        });
+      },
+
+      exportJson() {
+        const data = JSON.stringify(this.characters, null, 2);
+        this.downloadFile(data, 'rolecall-characters.json', 'application/json');
+        this.showToast('Exported as JSON', 'success');
+      },
+
+      exportCsv() {
+        const headers = ['name', 'backstory', 'psychIndex', 'arcPoints', 'relationships', 'notes'];
+        const rows = this.characters.map(c => [
+          c.name,
+          c.backstory?.replace(/,/g, ';') || '',
+          c.psychIndex,
+          c.arcPoints.join(';'),
+          c.relationships.map(r => {
+            const target = this.characters.find(ch => ch.id === r.targetId);
+            return target ? `${target.name}:${r.type}` : '';
+          }).join(';'),
+          c.notes.map(n => n.content).join(';')
+        ]);
+
+        const csv = [headers.join(','), ...rows.map(r => r.map(c => `"${c}"`).join(','))].join('\n');
+        this.downloadFile(csv, 'rolecall-characters.csv', 'text/csv');
+        this.showToast('Exported as CSV', 'success');
+      },
+
+      exportBibleJson() {
+        const chars = [...this.characters].sort((a, b) => (a.order || 0) - (b.order || 0));
+        const bible = {
+          project: {
+            title: this.projectTitle,
+            author: this.projectAuthor,
+            generated: new Date().toISOString()
+          },
+          characters: chars.map(c => ({
+            name: c.name,
+            backstory: c.backstory,
+            selfEsteem: c.selfEsteem,
+            socialReputation: c.socialReputation,
+            arcPoints: c.arcPoints,
+            relationships: c.relationships.map(r => {
+              const target = chars.find(ch => ch.id === r.targetId);
+              return target ? { character: target.name, type: r.type } : null;
+            }).filter(Boolean),
+            timeline: c.timeline,
+            notes: c.notes
+          }))
+        };
+        const data = JSON.stringify(bible, null, 2);
+        const filename = `${(this.projectTitle || 'character-bible').toLowerCase().replace(/\s+/g, '-')}.json`;
+        this.downloadFile(data, filename, 'application/json');
+        this.showToast('Character Bible exported as JSON', 'success');
+      },
+
+      exportBibleCsv() {
+        const chars = [...this.characters].sort((a, b) => (a.order || 0) - (b.order || 0));
+        
+        let csv = 'Project Title,Author,Generated Date\n';
+        csv += `"${this.projectTitle}","${this.projectAuthor}","${new Date().toLocaleDateString()}"\n\n`;
+        
+        csv += 'Character Name,Backstory,SE Act 1,SE Act 2,SE Act 3,SR Act 1,SR Act 2,SR Act 3,Psych Act 1,Psych Act 2,Psych Act 3,Relationships,Timeline Events,Notes\n';
+        
+        chars.forEach(c => {
+          const se = c.selfEsteem || [0, 0, 0];
+          const sr = c.socialReputation || [0, 0, 0];
+          const pi = c.arcPoints || [0, 0, 0];
+          const rels = (c.relationships || []).map(r => {
+            const target = chars.find(ch => ch.id === r.targetId);
+            return target ? `${target.name}:${r.type}` : '';
+          }).join('; ');
+          const timeline = (c.timeline || []).map(t => `${t.date}: ${t.title}`).join('; ');
+          const notes = (c.notes || []).map(n => n.content).join('; ');
+          
+          csv += `"${c.name}","${(c.backstory || '').replace(/"/g, '""')}","${se[0]}","${se[1]}","${se[2]}","${sr[0]}","${sr[1]}","${sr[2]}","${pi[0]}","${pi[1]}","${pi[2]}","${rels}","${timeline}","${notes}"\n`;
+        });
+        
+        const filename = `${(this.projectTitle || 'character-bible').toLowerCase().replace(/\s+/g, '-')}.csv`;
+        this.downloadFile(csv, filename, 'text/csv');
+        this.showToast('Character Bible exported as CSV', 'success');
+      },
+
+      downloadFile(content, filename, type) {
+        const blob = new Blob([content], { type });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      },
+
+      importData(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const content = e.target.result;
+          try {
+            if (file.name.endsWith('.json')) {
+              const data = JSON.parse(content);
+              let charArray = [];
+              
+              if (Array.isArray(data)) {
+                charArray = data;
+              } else if (data.characters && Array.isArray(data.characters)) {
+                charArray = data.characters;
+              }
+              
+              if (charArray.length > 0) {
+                let added = 0;
+                charArray.forEach(char => {
+                  if (!this.characters.find(c => c.name === char.name)) {
+                    this.characters.push({
+                      ...char,
+                      id: char.id || this.generateId(),
+                      createdAt: char.createdAt || Date.now(),
+                      updatedAt: Date.now()
+                    });
+                    added++;
+                  }
+                });
+                this.saveUserData();
+                this.renderCharacterList();
+                this.showToast(`Imported ${added} characters`, 'success');
+              }
+            } else if (file.name.endsWith('.csv')) {
+              const lines = content.split('\n');
+              const headers = lines[0].split(',');
+              
+              for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                const values = lines[i].split(',').map(v => v.replace(/^"|"$/g, ''));
+                const row = {};
+                headers.forEach((h, idx) => row[h] = values[idx]);
+                
+                const existing = this.characters.find(c => c.name === row.name);
+                if (!existing) {
+                  this.characters.push({
+                    id: this.generateId(),
+                    name: row.name || 'Unnamed',
+                    backstory: row.backstory || '',
+                    psychIndex: parseInt(row.psychIndex) || 50,
+                    arcPoints: row.arcPoints ? row.arcPoints.split(';').map(p => parseInt(p) || 50) : [50],
+                    relationships: [],
+                    timeline: [],
+                    notes: [],
+                    createdAt: Date.now(),
+                    updatedAt: Date.now()
+                  });
+                }
+              }
+              this.saveUserData();
+              this.renderCharacterList();
+              this.showToast('CSV imported successfully', 'success');
+            }
+          } catch (err) {
+            this.showToast('Error importing file', 'error');
+          }
+        };
+        reader.readAsText(file);
+      },
+
+      showToast(message, type = 'success') {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = `toast ${type} show`;
+        setTimeout(() => toast.classList.remove('show'), 3000);
+      },
+
+      escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      },
+
+      showModal(id) {
+        document.getElementById(id).classList.add('active');
+      },
+
+      hideModal(id) {
+        document.getElementById(id).classList.remove('active');
+      },
+
+      showView(viewId) {
+        ['characterView', 'graphView', 'compareView', 'exportView', 'importView', 'aboutView'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = 'none';
+        });
+        document.getElementById('emptyState').style.display = 'none';
+        
+        const view = document.getElementById(viewId);
+        if (view) view.style.display = 'block';
+        
+        if (viewId === 'graphView') {
+          setTimeout(() => this.renderGraph(), 300);
+        }
+        if (viewId === 'compareView') {
+          setTimeout(() => this.renderCompareArcs(), 100);
+        }
+      },
+
+      bindEvents() {
+        document.getElementById('settingsBtn').addEventListener('click', () => {
+          document.getElementById('settingsProjectTitle').value = this.projectTitle;
+          document.getElementById('settingsProjectAuthor').value = this.projectAuthor;
+          this.showModal('settingsModal');
+        });
+
+        document.getElementById('closeSettingsModal').addEventListener('click', () => this.hideModal('settingsModal'));
+        document.getElementById('cancelSettings').addEventListener('click', () => this.hideModal('settingsModal'));
+
+        document.getElementById('settingsForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const title = document.getElementById('settingsProjectTitle').value;
+          const author = document.getElementById('settingsProjectAuthor').value;
+          this.saveProjectSettings(title, author);
+          this.hideModal('settingsModal');
+          this.showToast('Project settings saved', 'success');
+        });
+
+        document.getElementById('bibleBtn').addEventListener('click', () => {
+          this.generateCharacterBible();
+        });
+
+        document.getElementById('themeToggle').addEventListener('click', () => this.toggleTheme());
+        
+        document.getElementById('helpBtn').addEventListener('click', () => this.showModal('helpModal'));
+        document.getElementById('closeHelpModal').addEventListener('click', () => this.hideModal('helpModal'));
+        
+        document.getElementById('aboutLink').addEventListener('click', () => this.showView('aboutView'));
+        
+        document.querySelectorAll('.auth-tab').forEach(tab => {
+          tab.addEventListener('click', () => {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.tab + 'Form').classList.add('active');
+          });
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const username = document.getElementById('loginUsername').value;
+          const password = document.getElementById('loginPassword').value;
+          if (await this.login(username, password)) {
+            this.showApp();
+          }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const username = document.getElementById('regUsername').value;
+          const email = document.getElementById('regEmail').value;
+          const password = document.getElementById('regPassword').value;
+          if (await this.register(username, email, password)) {
+            this.showApp();
+          }
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', () => this.logout());
+
+        // More menu toggle
+        const moreMenuBtn = document.getElementById('moreMenuBtn');
+        const moreMenu = document.getElementById('moreMenu');
+        if (moreMenuBtn && moreMenu) {
+          moreMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            moreMenu.classList.toggle('open');
+          });
+          document.addEventListener('click', () => {
+            moreMenu.classList.remove('open');
+          });
+          moreMenu.addEventListener('click', (e) => {
+            const item = e.target.closest('.more-menu-item');
+            if (item) {
+              const action = item.dataset.action;
+              moreMenu.classList.remove('open');
+              switch (action) {
+                case 'bible':
+                  document.getElementById('bibleBtn')?.click();
+                  break;
+                case 'graph':
+                  document.getElementById('graphViewBtn')?.click();
+                  break;
+                case 'compare':
+                  document.getElementById('compareBtn')?.click();
+                  break;
+                case 'export':
+                  document.getElementById('exportBtn')?.click();
+                  break;
+                case 'import':
+                  document.getElementById('importBtn')?.click();
+                  break;
+                case 'logout':
+                  this.logout();
+                  break;
+              }
+            }
+          });
+        }
+
+        // Project selector dropdown - use delegation for dynamic content
+        const projectSelector = document.getElementById('projectSelector');
+        if (projectSelector) {
+          projectSelector.addEventListener('click', (e) => {
+            e.stopPropagation();
+            projectSelector.classList.toggle('open');
+            this.renderProjectDropdown();
+          });
+          
+          document.addEventListener('click', () => {
+            projectSelector.classList.remove('open');
+          });
+          
+          // Event delegation for dynamic dropdown content
+          projectSelector.addEventListener('click', (e) => {
+            // New Project button
+            if (e.target.id === 'newProjectBtn' || e.target.closest('#newProjectBtn')) {
+              projectSelector.classList.remove('open');
+              this.showModal('newProjectModal');
+              return;
+            }
+            // Manage Projects button
+            if (e.target.id === 'manageProjectsBtn' || e.target.closest('#manageProjectsBtn')) {
+              projectSelector.classList.remove('open');
+              this.renderProjectManageList();
+              this.showModal('projectModal');
+              return;
+            }
+            // Project item click
+            const projectItem = e.target.closest('.project-item');
+            if (projectItem) {
+              const pid = projectItem.dataset.id;
+              const currentId = this.getCurrentProjectId();
+              if (pid && pid !== currentId) {
+                this.setCurrentProject(pid);
+                projectSelector.classList.remove('open');
+              }
+            }
+          });
+        }
+
+        // New Project form
+        document.getElementById('newProjectForm')?.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = document.getElementById('newProjectName').value;
+          if (name) {
+            this.createProject(name);
+            this.hideModal('newProjectModal');
+            document.getElementById('newProjectForm').reset();
+          }
+        });
+
+        // Close project modals
+        document.getElementById('closeNewProjectModal')?.addEventListener('click', () => this.hideModal('newProjectModal'));
+        document.getElementById('cancelNewProjectModal')?.addEventListener('click', () => this.hideModal('newProjectModal'));
+        document.getElementById('closeProjectModal')?.addEventListener('click', () => this.hideModal('projectModal'));
+        document.getElementById('cancelProjectModal')?.addEventListener('click', () => this.hideModal('projectModal'));
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+          this.renderCharacterList(
+            document.querySelector('.filter-btn.active').dataset.filter,
+            e.target.value
+          );
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            this.renderCharacterList(btn.dataset.filter, document.getElementById('searchInput').value);
+          });
+        });
+
+        document.getElementById('addCharacterBtn').addEventListener('click', () => {
+          document.getElementById('characterForm').reset();
+          document.getElementById('modalTitle').textContent = 'Add Character';
+          this.showModal('characterModal');
+        });
+
+        document.getElementById('addCharacterBtnHeader').addEventListener('click', () => {
+          document.getElementById('characterForm').reset();
+          document.getElementById('modalTitle').textContent = 'Add Character';
+          this.showModal('characterModal');
+        });
+
+        document.getElementById('characterForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const data = {
+            name: document.getElementById('modalCharName').value,
+            backstory: document.getElementById('modalCharBackstory').value,
+            se1: document.getElementById('modalCharSE1').value,
+            se2: document.getElementById('modalCharSE2').value,
+            se3: document.getElementById('modalCharSE3').value,
+            sr1: document.getElementById('modalCharSR1').value,
+            sr2: document.getElementById('modalCharSR2').value,
+            sr3: document.getElementById('modalCharSR3').value
+          };
+          
+          if (document.getElementById('modalTitle').textContent === 'Add Character') {
+            const character = this.createCharacter(data);
+            this.selectCharacter(character.id);
+          } else {
+            this.updateCharacter(this.currentCharacter.id, data);
+          }
+          this.hideModal('characterModal');
+          this.showToast('Character saved', 'success');
+        });
+
+        document.getElementById('closeModal').addEventListener('click', () => this.hideModal('characterModal'));
+        document.getElementById('cancelModal').addEventListener('click', () => this.hideModal('characterModal'));
+
+        document.querySelectorAll('.tab').forEach(tab => {
+          tab.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+            tab.classList.add('active');
+            document.getElementById('tab' + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1)).style.display = 'block';
+            this.currentTab = tab.dataset.tab;
+          });
+        });
+
+        document.getElementById('saveCharacterBtn').addEventListener('click', () => {
+          if (!this.currentCharacter) return;
+          const data = {
+            name: document.getElementById('charName').value,
+            backstory: document.getElementById('charBackstory').value,
+            se1: document.getElementById('charSE1').value,
+            se2: document.getElementById('charSE2').value,
+            se3: document.getElementById('charSE3').value,
+            sr1: document.getElementById('charSR1').value,
+            sr2: document.getElementById('charSR2').value,
+            sr3: document.getElementById('charSR3').value
+          };
+          this.updateCharacter(this.currentCharacter.id, data);
+          this.renderArcChart();
+          this.showToast('Changes saved', 'success');
+        });
+
+        ['charSE1', 'charSE2', 'charSE3', 'charSR1', 'charSR2', 'charSR3'].forEach(id => {
+          document.getElementById(id).addEventListener('input', () => this.calculatePsychIndex());
+        });
+
+        document.getElementById('addRelationshipBtn').addEventListener('click', () => {
+          const select = document.getElementById('relationshipTarget');
+          select.innerHTML = this.characters
+            .filter(c => c.id !== this.currentCharacter?.id)
+            .map(c => `<option value="${c.id}">${this.escapeHtml(c.name)}</option>`)
+            .join('');
+          this.showModal('relationshipModal');
+        });
+
+        document.getElementById('relationshipForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const targetId = document.getElementById('relationshipTarget').value;
+          const type = document.getElementById('relationshipType').value;
+          this.addRelationship(targetId, type);
+          this.hideModal('relationshipModal');
+          document.getElementById('relationshipType').value = '';
+          this.showToast('Relationship added', 'success');
+        });
+
+        document.getElementById('closeRelationshipModal').addEventListener('click', () => this.hideModal('relationshipModal'));
+        document.getElementById('cancelRelationshipModal').addEventListener('click', () => this.hideModal('relationshipModal'));
+
+        document.getElementById('addTimelineEventBtn').addEventListener('click', () => this.showModal('timelineModal'));
+
+        document.getElementById('timelineForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const title = document.getElementById('timelineTitle').value;
+          const date = document.getElementById('timelineDate').value;
+          const desc = document.getElementById('timelineDesc').value;
+          this.addTimelineEvent(title, date, desc);
+          this.hideModal('timelineModal');
+          document.getElementById('timelineForm').reset();
+          this.showToast('Event added', 'success');
+        });
+
+        document.getElementById('closeTimelineModal').addEventListener('click', () => this.hideModal('timelineModal'));
+        document.getElementById('cancelTimelineModal').addEventListener('click', () => this.hideModal('timelineModal'));
+
+        document.getElementById('addNoteBtn').addEventListener('click', () => {
+          const input = document.getElementById('newNoteInput');
+          this.addNote(input.value);
+        });
+
+        document.getElementById('newNoteInput').addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') {
+            this.addNote(e.target.value);
+          }
+        });
+
+        document.getElementById('graphViewBtn').addEventListener('click', () => this.showView('graphView'));
+        document.getElementById('compareBtn').addEventListener('click', () => this.showView('compareView'));
+        document.getElementById('exportBtn').addEventListener('click', () => this.showView('exportView'));
+        document.getElementById('importBtn').addEventListener('click', () => this.showView('importView'));
+
+        document.getElementById('exportJsonBtn').addEventListener('click', () => this.exportJson());
+        document.getElementById('exportCsvBtn').addEventListener('click', () => this.exportCsv());
+        document.getElementById('printPdfBtn').addEventListener('click', () => window.print());
+        document.getElementById('exportBibleJsonBtn').addEventListener('click', () => this.exportBibleJson());
+        document.getElementById('exportBibleCsvBtn').addEventListener('click', () => this.exportBibleCsv());
+
+        document.getElementById('importFile').addEventListener('change', (e) => {
+          if (e.target.files[0]) {
+            this.importData(e.target.files[0]);
+          }
+        });
+
+        document.getElementById('deleteModal').addEventListener('click', (e) => {
+          if (e.target.id === 'deleteModal') this.hideModal('deleteModal');
+        });
+
+        document.getElementById('cancelDelete').addEventListener('click', () => this.hideModal('deleteModal'));
+
+        window.addEventListener('resize', () => {
+          if (document.getElementById('graphView').style.display === 'block') {
+            this.renderGraph();
+          }
+          if (this.currentCharacter) {
+            this.renderArcChart();
+          }
+        });
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => App.init());
+  </script>
+</body>
+</html>

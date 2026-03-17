@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="main.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>RoleCall</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="search.js"></script>
+<script src="recent.js"></script>
+<script src="toc.js"></script>
+</head>
+<body><script>document.write('<div class="page-tags"><span class="page-tags-label">Tags:</span> <a href="tags.html" class="page-tag">Inbox</a></div>');</script><div class="breadcrumb"><a href="index.html">Home</a><span>›</span><a href="Inbox.html">Inbox</a><span>›</span><span class="breadcrumb-current">RoleCall</span></div><button id="theme-toggle" onclick="toggleTheme()">Light</button>
+
+
+<div id="Role Call Application Development Plan"><h1 id="Role Call Application Development Plan" class="header"><a href="#Role Call Application Development Plan">Role Call Application Development Plan</a></h1></div>
+
+<div id="Role Call Application Development Plan-Introduction"><h2 id="Introduction" class="header"><a href="#Role Call Application Development Plan-Introduction">Introduction</a></h2></div>
+<p>
+Role Call is a desktop application designed for writers and actors to manage and organize character information. The application will enable users to store and visualize detailed character profiles, including names, backstories, psychological indices, and relationships. The goal is to provide a user-friendly tool that enhances the creative process by allowing easy access to and manipulation of character data.
+</p>
+
+<p>
+The first iteration of Role Call will be a non-web-based application using Python and Flask for the backend, along with PostgreSQL for the database. The front-end will utilize Tkinter for creating the graphical user interface.
+</p>
+
+<div id="Role Call Application Development Plan-Functional Requirements"><h2 id="Functional Requirements" class="header"><a href="#Role Call Application Development Plan-Functional Requirements">Functional Requirements</a></h2></div>
+
+<div id="Role Call Application Development Plan-Functional Requirements-User Authentication"><h3 id="User Authentication" class="header"><a href="#Role Call Application Development Plan-Functional Requirements-User Authentication">User Authentication</a></h3></div>
+<ul>
+<li>
+User Registration
+
+<ul>
+<li>
+Register with a username, email, and password.
+
+<li>
+Validation to ensure unique username and email.
+
+<li>
+Password strength criteria including minimum length and mixture of letters and numbers.
+
+</ul>
+<li>
+User Login
+
+<ul>
+<li>
+Log in with username/email and password.
+
+<li>
+Provide "Remember Me" option for persistent login.
+
+</ul>
+<li>
+Password Recovery
+
+<ul>
+<li>
+Reset password via email.
+
+<li>
+Send a password reset link to the registered email.
+
+</ul>
+<li>
+User Profile Management
+
+<ul>
+<li>
+Update profile information (name, email, password).
+
+</ul>
+</ul>
+<div id="Role Call Application Development Plan-Functional Requirements-Character Management"><h3 id="Character Management" class="header"><a href="#Role Call Application Development Plan-Functional Requirements-Character Management">Character Management</a></h3></div>
+<ul>
+<li>
+Add Character
+
+<ul>
+<li>
+Create a new character with:
+
+<ul>
+<li>
+Name
+
+<li>
+Backstory (multi-line text)
+
+<li>
+Psychological Index (multi-line text or predefined categories)
+
+<li>
+Relationships (select other characters and define the relationship type)
+
+</ul>
+</ul>
+<li>
+Edit Character
+
+<ul>
+<li>
+Edit existing character details.
+
+<li>
+Save and update changes in the database.
+
+</ul>
+<li>
+Delete Character
+
+<ul>
+<li>
+Delete a character.
+
+<li>
+Confirmation dialog before deletion to prevent accidental removal.
+
+</ul>
+</ul>
+<div id="Role Call Application Development Plan-Functional Requirements-Character Relationships"><h3 id="Character Relationships" class="header"><a href="#Role Call Application Development Plan-Functional Requirements-Character Relationships">Character Relationships</a></h3></div>
+<ul>
+<li>
+Define Relationships
+
+<ul>
+<li>
+Select two characters and define their relationship (e.g., parent, friend, enemy).
+
+<li>
+Customizable relationship types.
+
+</ul>
+<li>
+View Relationships
+
+<ul>
+<li>
+Visualize relationships using a graph or diagram.
+
+<li>
+Clickable nodes to view character details.
+
+</ul>
+</ul>
+<div id="Role Call Application Development Plan-Functional Requirements-Search and Filter"><h3 id="Search and Filter" class="header"><a href="#Role Call Application Development Plan-Functional Requirements-Search and Filter">Search and Filter</a></h3></div>
+<ul>
+<li>
+Search Characters
+
+<ul>
+<li>
+Search for characters by name.
+
+<li>
+Display search results in a list format.
+
+</ul>
+<li>
+Filter Characters
+
+<ul>
+<li>
+Filter characters based on attributes:
+
+<ul>
+<li>
+Psychological traits
+
+<li>
+Relationship types
+
+<li>
+Keywords in backstories
+
+</ul>
+</ul>
+</ul>
+<div id="Role Call Application Development Plan-Functional Requirements-Data Import/Export"><h3 id="Data Import/Export" class="header"><a href="#Role Call Application Development Plan-Functional Requirements-Data Import/Export">Data Import/Export</a></h3></div>
+<ul>
+<li>
+Import Data
+
+<ul>
+<li>
+Import character data from CSV or JSON files.
+
+<li>
+Provide a template for correct formatting.
+
+</ul>
+<li>
+Export Data
+
+<ul>
+<li>
+Export character data to CSV or JSON files.
+
+<li>
+Select specific characters or export all data.
+
+</ul>
+</ul>
+<div id="Role Call Application Development Plan-Functional Requirements-Notes and Attachments"><h3 id="Notes and Attachments" class="header"><a href="#Role Call Application Development Plan-Functional Requirements-Notes and Attachments">Notes and Attachments</a></h3></div>
+<ul>
+<li>
+Add Notes
+
+<ul>
+<li>
+Add notes to each character.
+
+<li>
+Timestamped and editable notes.
+
+</ul>
+<li>
+Attach Files
+
+<ul>
+<li>
+Attach files (e.g., images, documents) to characters.
+
+<li>
+Securely store files and associate them with the correct character.
+
+</ul>
+</ul>
+<div id="Role Call Application Development Plan-Functional Requirements-Timeline Management"><h3 id="Timeline Management" class="header"><a href="#Role Call Application Development Plan-Functional Requirements-Timeline Management">Timeline Management</a></h3></div>
+<ul>
+<li>
+Create Timelines
+
+<ul>
+<li>
+Create timelines for each character.
+
+<li>
+Include significant events (e.g., birth, major life events).
+
+</ul>
+<li>
+View Timelines
+
+<ul>
+<li>
+View character timelines in chronological order.
+
+<li>
+Interactive timeline for adding or editing events.
+
+</ul>
+</ul>
+<div id="Role Call Application Development Plan-Functional Requirements-Collaboration Tools"><h3 id="Collaboration Tools" class="header"><a href="#Role Call Application Development Plan-Functional Requirements-Collaboration Tools">Collaboration Tools</a></h3></div>
+<ul>
+<li>
+Share Characters
+
+<ul>
+<li>
+Share character profiles with other registered users.
+
+<li>
+Define permission levels (e.g., view-only, edit).
+
+</ul>
+<li>
+Real-Time Collaboration
+
+<ul>
+<li>
+Multiple users edit the same character profile simultaneously.
+
+<li>
+Real-time updates for all collaborators.
+
+</ul>
+</ul>
+<div id="Role Call Application Development Plan-Functional Requirements-Version Control"><h3 id="Version Control" class="header"><a href="#Role Call Application Development Plan-Functional Requirements-Version Control">Version Control</a></h3></div>
+<ul>
+<li>
+Track Changes
+
+<ul>
+<li>
+Log every change to a character profile.
+
+<li>
+View change history.
+
+</ul>
+<li>
+Revert Changes
+
+<ul>
+<li>
+Revert to a previous version of a character profile.
+
+<li>
+Confirmation dialog before reverting changes.
+
+</ul>
+</ul>
+<div id="Role Call Application Development Plan-Non-Functional Requirements"><h2 id="Non-Functional Requirements" class="header"><a href="#Role Call Application Development Plan-Non-Functional Requirements">Non-Functional Requirements</a></h2></div>
+<ul>
+<li>
+Usability: Intuitive and easy to navigate user interface with tooltips and help documentation.
+
+<li>
+Performance: Quick load times and handling large data without significant lag.
+
+<li>
+Security: Data stored securely with encryption for sensitive information. Protection against common vulnerabilities.
+
+<li>
+Scalability: Ability to scale for growing numbers of users and data without performance degradation.
+
+<li>
+Reliability: High availability with minimal downtime and maintained data integrity.
+
+<li>
+Compatibility: Compatible with major operating systems (Windows, macOS, Linux).
+
+<li>
+Maintainability: Well-documented and modular codebase for easy maintenance and updates.
+
+<li>
+Accessibility: Follow accessibility guidelines for use by people with disabilities.
+
+</ul>
+<div id="Role Call Application Development Plan-Tech Stack"><h2 id="Tech Stack" class="header"><a href="#Role Call Application Development Plan-Tech Stack">Tech Stack</a></h2></div>
+
+<div id="Role Call Application Development Plan-Tech Stack-Back-End"><h3 id="Back-End" class="header"><a href="#Role Call Application Development Plan-Tech Stack-Back-End">Back-End</a></h3></div>
+<ul>
+<li>
+Python: Core programming language.
+
+<li>
+Flask: Lightweight web framework for APIs and backend logic.
+
+<li>
+SQLAlchemy: ORM tool for Python and PostgreSQL.
+
+<li>
+PostgreSQL: Robust, open-source relational database system.
+
+</ul>
+<div id="Role Call Application Development Plan-Tech Stack-Front-End"><h3 id="Front-End" class="header"><a href="#Role Call Application Development Plan-Tech Stack-Front-End">Front-End</a></h3></div>
+<ul>
+<li>
+Tkinter: Standard GUI library for Python.
+
+<li>
+PyQt/Kivy: Alternative GUI libraries with advanced features and modern look.
+
+</ul>
+<div id="Role Call Application Development Plan-Tech Stack-Additional Libraries"><h3 id="Additional Libraries" class="header"><a href="#Role Call Application Development Plan-Tech Stack-Additional Libraries">Additional Libraries</a></h3></div>
+<ul>
+<li>
+WTForms: Form handling and validation within Flask.
+
+<li>
+Flask-SocketIO: For adding real-time features if needed later.
+
+<li>
+Flask-JWT-Extended: For handling authentication and authorization using JSON Web Tokens (JWT).
+
+</ul>
+<div id="Role Call Application Development Plan-Tech Stack-Development and Testing Tools"><h3 id="Development and Testing Tools" class="header"><a href="#Role Call Application Development Plan-Tech Stack-Development and Testing Tools">Development and Testing Tools</a></h3></div>
+<ul>
+<li>
+PyTest: Testing the Python codebase.
+
+<li>
+PgAdmin: Management tool for PostgreSQL databases.
+
+<li>
+Docker: Containerizing the application for consistent development and deployment environments.
+
+</ul>
+<div id="Role Call Application Development Plan-Tech Stack-Deployment"><h3 id="Deployment" class="header"><a href="#Role Call Application Development Plan-Tech Stack-Deployment">Deployment</a></h3></div>
+<ul>
+<li>
+PyInstaller: Bundling the Python application into standalone executables for distribution.
+
+<li>
+DigitalOcean/AWS: Hosting the PostgreSQL database if remote access is needed.
+
+</ul>
+<div id="Role Call Application Development Plan-Project Structure"><h2 id="Project Structure" class="header"><a href="#Role Call Application Development Plan-Project Structure">Project Structure</a></h2></div>
+
+<p>
+```text
+rolecall/
+├── app/
+│   ├── _<em>init</em>_.py
+│   ├── models.py
+│   ├── routes.py
+│   ├── forms.py
+│   ├── templates/
+│   └── static/
+├── gui/
+│   ├── main.py
+│   ├── views.py
+│   └── assets/
+├── tests/
+│   ├── test_app.py
+│   └── test_gui.py
+├── config.py
+├── run.py
+└── requirements.txt
+```
+</p>
+
+<div id="Role Call Application Development Plan-Development Steps"><h2 id="Development Steps" class="header"><a href="#Role Call Application Development Plan-Development Steps">Development Steps</a></h2></div>
+
+<div id="Role Call Application Development Plan-Development Steps-1. Set Up Development Environment"><h3 id="1. Set Up Development Environment" class="header"><a href="#Role Call Application Development Plan-Development Steps-1. Set Up Development Environment">1. Set Up Development Environment</a></h3></div>
+<ol>
+<li>
+Install Python: Ensure Python 3.x is installed.
+
+<li>
+Set Up a Virtual Environment:
+   ```sh
+   python -m venv rolecall_env
+   source rolecall_env/bin/activate  # On Windows use <code>rolecall_env\Scripts\activate</code>
+   ```
+
+<li>
+Install Flask and SQLAlchemy:
+   ```sh
+   pip install Flask SQLAlchemy Flask-JWT-Extended WTForms Flask-SocketIO psycopg2
+   ```
+
+</ol>
+<div id="Role Call Application Development Plan-Development Steps-2. Create Project Structure"><h3 id="2. Create Project Structure" class="header"><a href="#Role Call Application Development Plan-Development Steps-2. Create Project Structure">2. Create Project Structure</a></h3></div>
+<p>
+```text
+rolecall/
+├── app/
+│   ├── _<em>init</em>_.py
+│   ├── models.py
+│   ├── routes.py
+│   ├── forms.py
+│   ├── templates/
+│   └── static/
+├── gui/
+│   ├── main.py
+│   ├── views.py
+│   └── assets/
+├── tests/
+│   ├── test_app.py
+│   └── test_gui.py
+├── config.py
+├── run.py
+└── requirements.txt
+```
+</p>
+
+<div id="Role Call Application Development Plan-Development Steps-3. Implement Core Features"><h3 id="3. Implement Core Features" class="header"><a href="#Role Call Application Development Plan-Development Steps-3. Implement Core Features">3. Implement Core Features</a></h3></div>
+
+<ul>
+<li>
+Develop the necessary database models.
+
+<li>
+Set up Flask app initialization and configuration.
+
+<li>
+Implement routes for character management.
+
+<li>
+Develop the Tkinter GUI for the front-end.
+
+</ul>
+<div id="Role Call Application Development Plan-Development Steps-4. Develop Front-End GUI"><h3 id="4. Develop Front-End GUI" class="header"><a href="#Role Call Application Development Plan-Development Steps-4. Develop Front-End GUI">4. Develop Front-End GUI</a></h3></div>
+
+<ul>
+<li>
+Design the main GUI window.
+
+<li>
+Implement features for adding, editing, and viewing character details.
+
+<li>
+Develop visualization tools for character relationships.
+
+</ul>
+<div id="Role Call Application Development Plan-Development Steps-5. Deployment and Testing"><h3 id="5. Deployment and Testing" class="header"><a href="#Role Call Application Development Plan-Development Steps-5. Deployment and Testing">5. Deployment and Testing</a></h3></div>
+
+<ul>
+<li>
+Use PyTest to write tests for both backend and GUI components.
+
+<li>
+Build the executable using PyInstaller:
+   ```sh
+   pip install pyinstaller
+   pyinstaller --onefile gui/main.py
+   ```
+
+<li>
+Deploy and test the application on different operating systems.
+
+</ul>
+<div id="Role Call Application Development Plan-Wireframe Designs"><h2 id="Wireframe Designs" class="header"><a href="#Role Call Application Development Plan-Wireframe Designs">Wireframe Designs</a></h2></div>
+
+<p>
+Here are the wireframe designs for the Role Call application:
+</p>
+
+<div id="Role Call Application Development Plan-Wireframe Designs-Main Screen"><h3 id="Main Screen" class="header"><a href="#Role Call Application Development Plan-Wireframe Designs-Main Screen">Main Screen</a></h3></div>
+
+<ul>
+<li>
+*<span id="Role Call Application Development Plan-Wireframe Designs-Main Screen-Title:"></span><strong id="Title:">Title:</strong>* Role Call
+
+<li>
+*<span id="Role Call Application Development Plan-Wireframe Designs-Main Screen-Menu Bar:"></span><strong id="Menu Bar:">Menu Bar:</strong>*
+
+<ul>
+<li>
+File
+
+<ul>
+<li>
+New Character
+
+<li>
+Import Data
+
+<li>
+Export Data
+
+<li>
+Exit
+
+</ul>
+<li>
+Edit
+
+<ul>
+<li>
+Edit Character
+
+<li>
+Delete Character
+
+</ul>
+<li>
+View
+
+<ul>
+<li>
+Search Characters
+
+<li>
+Filter Characters
+
+</ul>
+<li>
+Help
+
+<ul>
+<li>
+User Guide
+
+<li>
+About
+
+</ul>
+</ul>
+<li>
+*<span id="Role Call Application Development Plan-Wireframe Designs-Main Screen-Character List Panel:"></span><strong id="Character List Panel:">Character List Panel:</strong>* 
+
+<ul>
+<li>
+List of character names with search and filter options.
+
+<li>
+Add Character button at the bottom.
+
+</ul>
+<li>
+*<span id="Role Call Application Development Plan-Wireframe Designs-Main Screen-Character Details Panel:"></span><strong id="Character Details Panel:">Character Details Panel:</strong>*
+
+<ul>
+<li>
+Character Name: Text field
+
+<li>
+Backstory: Multi-line text area
+
+<li>
+Psychological Index: Multi-line text area or dropdown
+
+<li>
+Relationships: List with Add Relationship button
+
+</ul>
+<li>
+*<span id="Role Call Application Development Plan-Wireframe Designs-Main Screen-Character Relationship Visualization:"></span><strong id="Character Relationship Visualization:">Character Relationship Visualization:</strong>*
+
+<ul>
+<li>
+Graphical representation of character relationships.
+
+</ul>
+</ul>
+<div id="Role Call Application Development Plan-Wireframe Designs-Add/Edit Character Screen"><h3 id="Add/Edit Character Screen" class="header"><a href="#Role Call Application Development Plan-Wireframe Designs-Add/Edit Character Screen">Add/Edit Character Screen</a></h3></div>
+ 
+<ul>
+<li>
+*<span id="Role Call Application Development Plan-Wireframe Designs-Add/Edit Character Screen-Character Details Form:"></span><strong id="Character Details Form:">Character Details Form:</strong>*
+
+<ul>
+<li>
+Name: Text field
+
+<li>
+Backstory: Multi-line text area
+
+<li>
+Psychological Index: Multi-line text area or dropdown
+
+<li>
+Relationships: List with Add/Edit/Delete options
+
+</ul>
+<li>
+*<span id="Role Call Application Development Plan-Wireframe Designs-Add/Edit Character Screen-Buttons:"></span><strong id="Buttons:">Buttons:</strong>*
+
+<ul>
+<li>
+Save
+
+<li>
+Cancel
+
+</ul>
+</ul>
+<div id="Role Call Application Development Plan-Wireframe Designs-Import/Export Screen"><h3 id="Import/Export Screen" class="header"><a href="#Role Call Application Development Plan-Wireframe Designs-Import/Export Screen">Import/Export Screen</a></h3></div>
+
+<ul>
+<li>
+*<span id="Role Call Application Development Plan-Wireframe Designs-Import/Export Screen-File Selection:"></span><strong id="File Selection:">File Selection:</strong>*
+
+<ul>
+<li>
+Import: File chooser dialog to select CSV/JSON files
+
+<li>
+Export: File chooser dialog to save CSV/JSON files
+
+</ul>
+<li>
+*<span id="Role Call Application Development Plan-Wireframe Designs-Import/Export Screen-Import Template Download:"></span><strong id="Import Template Download:">Import Template Download:</strong>*
+
+<ul>
+<li>
+Button to download the template for correct formatting.
+
+</ul>
+</ul>
+<div id="Role Call Application Development Plan-Wireframe Designs-Notes and Attachments Screen"><h3 id="Notes and Attachments Screen" class="header"><a href="#Role Call Application Development Plan-Wireframe Designs-Notes and Attachments Screen">Notes and Attachments Screen</a></h3></div>
+
+<ul>
+<li>
+*<span id="Role Call Application Development Plan-Wireframe Designs-Notes and Attachments Screen-Notes Section:"></span><strong id="Notes Section:">Notes Section:</strong>*
+
+<ul>
+<li>
+List of notes with timestamps.
+
+<li>
+Add/Edit/Delete notes options.
+
+</ul>
+</ul>
+<p>
+<a href="-.html">-</a> *<span id="Role Call Application Development Plan-Wireframe Designs-Notes and Attachments Screen-Attachments Section:"></span><strong id="Attachments Section:">Attachments Section:</strong>*
+</p>
+<ul>
+<li>
+List of attached files.
+
+<li>
+Add/Delete attachments options.
+
+</ul>
+<div id="Role Call Application Development Plan-Wireframe Designs-Timeline Screen"><h3 id="Timeline Screen" class="header"><a href="#Role Call Application Development Plan-Wireframe Designs-Timeline Screen">Timeline Screen</a></h3></div>
+
+<ul>
+<li>
+*<span id="Role Call Application Development Plan-Wireframe Designs-Timeline Screen-Timeline View:"></span><strong id="Timeline View:">Timeline View:</strong>*
+
+<ul>
+<li>
+Chronological view of character events.
+
+<li>
+Add/Edit/Delete events options.
+
+</ul>
+</ul>
+<div id="Role Call Application Development Plan-Conclusion"><h2 id="Conclusion" class="header"><a href="#Role Call Application Development Plan-Conclusion">Conclusion</a></h2></div>
+
+<p>
+The Role Call application aims to streamline character management for writers and actors. This development plan provides a detailed outline of the functional and non-functional requirements, the tech stack, and the development steps needed to create a robust and user-friendly application. By following this plan, the development team can efficiently build, test, and deploy the first iteration of Role Call.
+</p>
+
+
+
+
+<div id="Role Call Application Development Plan-Wed Jul 3 2024"><h2 id="Wed Jul 3 2024" class="header"><a href="#Role Call Application Development Plan-Wed Jul 3 2024">Wed Jul 3 2024</a></h2></div>
+<p>
+<span id="Role Call Application Development Plan-Wed Jul 3 2024-RoleCall"></span><span class="tag" id="RoleCall">RoleCall</span> <span id="Role Call Application Development Plan-Wed Jul 3 2024-CharacterDatabase"></span><span class="tag" id="CharacterDatabase">CharacterDatabase</span> <span id="Role Call Application Development Plan-Wed Jul 3 2024-Python"></span><span class="tag" id="Python">Python</span> <span id="Role Call Application Development Plan-Wed Jul 3 2024-Flask"></span><span class="tag" id="Flask">Flask</span> <span id="Role Call Application Development Plan-Wed Jul 3 2024-ComputerScience"></span><span class="tag" id="ComputerScience">ComputerScience</span>
+</p>
+
+<div id="Role Call Application Development Plan-Wed Jul 3 2024-*Updates*"><h3 id="*Updates*" class="header"><a href="#Role Call Application Development Plan-Wed Jul 3 2024-*Updates*"><span id="Role Call Application Development Plan-Wed Jul 3 2024-*Updates*-Updates"></span><strong id="Updates">Updates</strong></a></h3></div>
+
+<ul>
+<li>
+Got the app working with the following tech stack 
+
+<ul>
+<li>
+Python
+
+<li>
+Flask
+
+<li>
+HTML
+
+<li>
+Chart.js
+
+</ul>
+</ul>
+   
+<ol>
+<li>
+Check link for MVP version here: <a href="https://github.com/MiragianCycle/Fictional-Character-Database/tree/main">Character Database</a> 
+
+<li>
+MVP version has the following functionality: 
+
+<ul>
+<li>
+Add a character 
+
+<li>
+Edit a character
+
+<li>
+Give a character a psychological journey
+
+<li>
+Compare psychological journeys of characters
+
+<li>
+How to use
+
+</ul>
+<li>
+Following features to be added  
+
+<ul>
+<li>
+Visualizing relationships and intensities:
+   We'll explore options like network graphs or heat maps to represent character relationships.
+   The thickness of lines or color intensity could represent the relationship intensity.
+
+<li>
+Enhancing chart information:
+   We'll add clear labels to the x-axis (Acts 1, 2, 3) and y-axis (Psychological Index).
+   We'll include a legend explaining what the line represents.
+
+<li>
+Adding character-specific titles:
+   Each chart will be titled with the character's name followed by "Character Arc".
+
+<li>
+Modernizing and adding interactivity to charts:
+   We'll look into more modern charting libraries like D3.js or Plotly.js.
+   We'll add interactive features like tooltips on hover, zooming, or click-for-details functionality.
+
+<li>
+PDF download in the form of a Character Bible in PDF
+
+</ul>
+</ol>
+   
+
+
+
+<div id="Role Call Application Development Plan-Thu Jul 4 2024"><h2 id="Thu Jul 4 2024" class="header"><a href="#Role Call Application Development Plan-Thu Jul 4 2024">Thu Jul 4 2024</a></h2></div>
+<p>
+<span id="Role Call Application Development Plan-Thu Jul 4 2024-CharacterDatabase"></span><span class="tag" id="CharacterDatabase">CharacterDatabase</span> <span id="Role Call Application Development Plan-Thu Jul 4 2024-ComputerScience"></span><span class="tag" id="ComputerScience">ComputerScience</span> <span id="Role Call Application Development Plan-Thu Jul 4 2024-Personata"></span><span class="tag" id="Personata">Personata</span>
+</p>
+
+<ul>
+<li>
+New brand name: Persona
+
+<li>
+Full functionality achieved. The app has the following features:
+
+<ul>
+<li>
+It can add characters and their psyches
+
+<li>
+It can render each character's psyche over a line graph showing how they change during the course of a narrative
+
+<li>
+It can highlight characters' relationships to one another via a network graph
+
+<li>
+It can compare character arcs (psyches)
+
+<li>
+It shows a global relationship network diagram
+
+<li>
+It generates a PDF
+
+</ul>
+<li>
+Next steps
+
+<ul>
+<li class="rejected">
+Style the PDF to be reader friendly and more attractive
+
+<li class="rejected">
+Allow additional download options in JSON, CSV, and HTML
+
+<li class="rejected">
+User Authentication: Implement user accounts so multiple writers can use the app independently.
+
+<li class="rejected">
+Character Tags: Allow users to add tags to characters for easier categorization and filtering
+
+<li class="rejected">
+Story Events: Create a timeline feature where users can add key story events and link them to character arcs.
+
+<li class="rejected">
+Character Growth Tracking: Implement a feature to track and visualize character growth over time, beyond just the three-act structure.
+
+<li class="rejected">
+Relationship Dynamics: Add more nuanced relationship types and allow for changing relationships over the course of the story
+
+<li class="rejected">
+Character Comparison: Enhance the character comparison feature with more detailed analytics and visualizations
+
+<li class="rejected">
+Export Options: Provide more export options, such as JSON or CSV, in addition to the PDF
+
+<li class="rejected">
+Template Characters: Allow users to create template characters that can be quickly duplicated and modified
+
+<li class="rejected">
+Image Upload: Let users upload character images or avatars.
+
+<li class="rejected">
+Notes and Comments: Add a feature for users to attach notes or comments to characters, relationships, or story points
+
+<li class="rejected">
+Search Functionality: Implement a robust search feature to quickly find characters or relationships
+
+<li class="rejected">
+Version History: Keep track of changes made to characters over time, allowing users to revert if needed
+
+<li class="rejected">
+Mobile Responsiveness: Ensure the app works well on mobile devices for on-the-go writing and brainstorming
+
+<li class="rejected">
+Data Visualization Enhancements: Implement more advanced charts and graphs to visualize character data and relationships
+
+<li class="rejected">
+API Integration: Create an API that allows the app to integrate with other writing tools or <a href="services.html">services</a>.
+
+</ul>
+</ul>
+<p>
+<a href="index.html">index</a>
+<a href="inbox.html">inbox</a>
+<a href="AppIdeas.html">AppIdeas</a>
+</p>
+
+<script>const toggle=document.getElementById("theme-toggle");if(localStorage.getItem("theme")==="light"){document.documentElement.setAttribute("data-theme","light");toggle.textContent="Dark"}function toggleTheme(){const html=document.documentElement;if(html.getAttribute("data-theme")==="light"){html.removeAttribute("data-theme");localStorage.setItem("theme","dark");toggle.textContent="Light"}else{html.setAttribute("data-theme","light");localStorage.setItem("theme","light");toggle.textContent="Dark"}}</script><div id="backlinks-container" class="hidden"></div><script>
+(function() {
+  var currentPage = window.location.pathname.split('/').pop();
+  var sections = {'index.html':'Home','Inbox.html':'Inbox','PJ.html':'Personal Journal','MiragianCyclesBible.html':'Miragian Cycles','FilmProductionWork.html':'Film Production','CS.html':'Computer Science','MI.html':'Machine Intelligence','PF.html':'Personal Finance','MU.html':'Music','VS.html':'Visual Skills','HEC.html':'Higher Education','FnB.html':'Food & Beverage','LnD.html':'Learning','SS.html':'Social Science','SCI.html':'Science','Exe.html':'Exercises','Tam.html':'Tamil','Sin.html':'Sinhala','Fre.html':'French','TemplateZettlekasten.html':'Zettelkasten','AppIdeas.html':'App Ideas','PersonalTasks.html':'Tasks','WritingTasks.html':'Writing Tasks','ComputerScienceTasks.html':'CS Tasks','FilmmakingYouTubeTasks.html':'Filmmaking Tasks','zettlekastenHub.html':'Zettelkasten',};
+  var section = sections[currentPage] || 'Inbox';
+  var sectionLink = 'Inbox.html';
+  
+  fetch('backlinks.json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var backlinks = data[currentPage];
+      var container = document.getElementById('backlinks-container');
+      if (backlinks && backlinks.length > 0) {
+        var html = '<div class="backlinks-header">Linked from</div><ul id="backlinks-list">';
+        backlinks.forEach(function(backlink) {
+          html += '<li><a href="' + backlink.file + '">' + backlink.title + '</a></li>';
+        });
+        html += '</ul>';
+        container.innerHTML = html;
+        container.classList.remove('hidden');
+      }
+    });
+})();
+</script></body>
+</html>

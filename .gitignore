@@ -1,0 +1,7 @@
+# Persona - Character Data
+
+# User data exports
+*local*.json
+
+# Generated files
+*.pdf

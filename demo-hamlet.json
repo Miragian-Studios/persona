@@ -1,0 +1,211 @@
+[
+  {
+    "id": "hamlet-001",
+    "name": "Hamlet",
+    "backstory": "Prince of Denmark, son of King Hamlet and Queen Gertrude. After his father's murder, he descends into melancholy and madness, torn between his duty to avenge his father and his philosophical nature.",
+    "se1": 4,
+    "se2": 2,
+    "se3": 1,
+    "sr1": 4,
+    "sr2": 2,
+    "sr3": 2,
+    "arcPoints": [0, 0, -1],
+    "relationships": [
+      { "targetId": "hamlet-002", "type": "uncle-nephew" },
+      { "targetId": "hamlet-003", "type": "son-mother" },
+      { "targetId": "hamlet-004", "type": "lover" },
+      { "targetId": "hamlet-006", "type": "friend" }
+    ],
+    "timeline": [
+      { "id": "t1", "event": "Father murdered by Claudius", "date": "Act 1" },
+      { "id": "t2", "event": "Ghost reveals truth", "date": "Act 1" },
+      { "id": "t3", "event": "Decides to feign madness", "date": "Act 1" },
+      { "id": "t4", "event": "Kills Polonius thinking it's Claudius", "date": "Act 3" },
+      { "id": "t5", "event": "Accepts duel, poisoned by Laertes", "date": "Act 5" }
+    ],
+    "notes": [
+      "To be, or not to be: that is the question",
+      "Feigns madness to investigate the truth",
+      "Long delay in avenging his father"
+    ],
+    "createdAt": 1700000000000,
+    "updatedAt": 1700000000000
+  },
+  {
+    "id": "hamlet-002",
+    "name": "Claudius",
+    "backstory": "King of Denmark, brother of King Hamlet. He murdered his brother to seize the throne and marry Gertrude. A cunning politician who maintains his power through manipulation.",
+    "se1": 3,
+    "se2": 3,
+    "se3": 2,
+    "sr1": 5,
+    "sr2": 4,
+    "sr3": 2,
+    "arcPoints": [-2, -1, 0],
+    "relationships": [
+      { "targetId": "hamlet-001", "type": "uncle-nephew" },
+      { "targetId": "hamlet-003", "type": "husband-wife" },
+      { "targetId": "hamlet-005", "type": "employer" }
+    ],
+    "timeline": [
+      { "id": "t1", "event": "Murders King Hamlet", "date": "Before play begins" },
+      { "id": "t2", "event": "Marries Gertrude, takes throne", "date": "Shortly after" },
+      { "id": "t3", "event": "Sends Hamlet to England to be killed", "date": "Act 3" },
+      { "id": "t4", "event": "Poisoned by his own plan", "date": "Act 5" }
+    ],
+    "notes": [
+      "A serpent that hath stung him",
+      "Uses Rosencrantz and Guildenstern",
+      "Prays for forgiveness but cannot repent"
+    ],
+    "createdAt": 1700000000000,
+    "updatedAt": 1700000000000
+  },
+  {
+    "id": "hamlet-003",
+    "name": "Gertrude",
+    "backstory": "Queen of Denmark, mother of Hamlet. She quickly marries Claudius after her husband's death. Her love for her son and her marriage create conflict throughout the play.",
+    "se1": 3,
+    "se2": 2,
+    "se3": 1,
+    "sr1": 4,
+    "sr2": 4,
+    "sr3": 3,
+    "arcPoints": [-1, -2, -2],
+    "relationships": [
+      { "targetId": "hamlet-001", "type": "mother-son" },
+      { "targetId": "hamlet-002", "type": "wife-husband" }
+    ],
+    "timeline": [
+      { "id": "t1", "event": "King Hamlet dies", "date": "Before play begins" },
+      { "id": "t2", "event": "Marries Claudius", "date": "Shortly after" },
+      { "id": "t3", "event": "Drinks poisoned wine, dies", "date": "Act 5" }
+    ],
+    "notes": [
+      "Seems, madam! Nay, it is; I know not 'seems'",
+      "Cannot see Hamlet's grief",
+      "Dies from poisoned wine meant for Hamlet"
+    ],
+    "createdAt": 1700000000000,
+    "updatedAt": 1700000000000
+  },
+  {
+    "id": "hamlet-004",
+    "name": "Ophelia",
+    "backstory": "Daughter of Polonius, sister of Laertes, and Hamlet's love interest. She is obedient to her father and brother, torn between her love for Hamlet and her duty to her family.",
+    "se1": 2,
+    "se2": 1,
+    "se3": 0,
+    "sr1": 3,
+    "sr2": 2,
+    "sr3": 1,
+    "arcPoints": [-1, -1, -1],
+    "relationships": [
+      { "targetId": "hamlet-001", "type": "lover" },
+      { "targetId": "hamlet-005", "type": "daughter-father" },
+      { "targetId": "hamlet-007", "type": "sister-brother" }
+    ],
+    "timeline": [
+      { "id": "t1", "event": "Relationship with Hamlet", "date": "Before play" },
+      { "id": "t2", "event": "Father forbids her see Hamlet", "date": "Act 1" },
+      { "id": "t3", "event": "Hamlet rejects her cruelly", "date": "Act 3" },
+      { "id": "t4", "event": "Goes mad, drowns", "date": "Act 4" }
+    ],
+    "notes": [
+      "I loved you once",
+      "Laertes warns her about Hamlet",
+      "Distribution of flowers symbolizes madness"
+    ],
+    "createdAt": 1700000000000,
+    "updatedAt": 1700000000000
+  },
+  {
+    "id": "hamlet-005",
+    "name": "Polonius",
+    "backstory": "Chief counselor to King Claudius, father of Ophelia and Laertes. A verbose, self-important politician who spies on others and is ultimately killed by Hamlet.",
+    "se1": 4,
+    "se2": 3,
+    "se3": 2,
+    "sr1": 4,
+    "sr2": 3,
+    "sr3": 3,
+    "arcPoints": [0, 0, -1],
+    "relationships": [
+      { "targetId": "hamlet-004", "type": "father-daughter" },
+      { "targetId": "hamlet-007", "type": "father-son" },
+      { "targetId": "hamlet-002", "type": "advisor" },
+      { "targetId": "hamlet-001", "type": "advisor-subject" }
+    ],
+    "timeline": [
+      { "id": "t1", "event": "Advises Laertes", "date": "Act 1" },
+      { "id": "t2", "event": "Spies on Hamlet and Ophelia", "date": "Act 2" },
+      { "id": "t3", "event": "Hides in Gertrude's chamber", "date": "Act 3" },
+      { "id": "t4", "event": "Hamlet kills him", "date": "Act 3" }
+    ],
+    "notes": [
+      "To thine own self be true",
+      "Overbearing father",
+      "Thinks Hamlet is mad for love of Ophelia"
+    ],
+    "createdAt": 1700000000000,
+    "updatedAt": 1700000000000
+  },
+  {
+    "id": "hamlet-006",
+    "name": "Horatio",
+    "backstory": "Hamlet's closest friend and confidant. Educated at Wittenberg, he is the only person Hamlet trusts completely. He witnesses the ghost and helps Hamlet throughout.",
+    "se1": 4,
+    "se2": 4,
+    "se3": 4,
+    "sr1": 2,
+    "sr2": 2,
+    "sr3": 3,
+    "arcPoints": [2, 2, 1],
+    "relationships": [
+      { "targetId": "hamlet-001", "type": "friend" }
+    ],
+    "timeline": [
+      { "id": "t1", "event": "Sees the ghost with Hamlet", "date": "Act 1" },
+      { "id": "t2", "event": "Helps Hamlet with the play", "date": "Act 2" },
+      { "id": "t3", "event": "Watches Ophelia's funeral", "date": "Act 5" },
+      { "id": "t4", "event": "Survives, promises to tell story", "date": "Act 5" }
+    ],
+    "notes": [
+      "Horatio is a scholar, like Hamlet",
+      "The only one who knows Hamlet's plan",
+      "Represents loyalty and reason"
+    ],
+    "createdAt": 1700000000000,
+    "updatedAt": 1700000000000
+  },
+  {
+    "id": "hamlet-007",
+    "name": "Laertes",
+    "backstory": "Son of Polonius, brother of Ophelia. He returns from France to avenge his father's death. His need for revenge parallels Hamlet's but is more immediate.",
+    "se1": 3,
+    "se2": 2,
+    "se3": 1,
+    "sr1": 3,
+    "sr2": 4,
+    "sr3": 2,
+    "arcPoints": [0, -2, -1],
+    "relationships": [
+      { "targetId": "hamlet-005", "type": "son-father" },
+      { "targetId": "hamlet-004", "type": "brother-sister" },
+      { "targetId": "hamlet-001", "type": "rival" }
+    ],
+    "timeline": [
+      { "id": "t1", "event": "Leaves for France", "date": "Act 1" },
+      { "id": "t2", "event": "Returns for father's funeral", "date": "Act 4" },
+      { "id": "t3", "event": "Conspires with Claudius against Hamlet", "date": "Act 4" },
+      { "id": "t4", "event": "Killed by poisoned sword", "date": "Act 5" }
+    ],
+    "notes": [
+      "A king, though never so wise, may be verified in this",
+      "His revenge is swift and direct",
+      "Killed by his own poisoned blade"
+    ],
+    "createdAt": 1700000000000,
+    "updatedAt": 1700000000000
+  }
+]
